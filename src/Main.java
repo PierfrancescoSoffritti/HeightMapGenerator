@@ -15,8 +15,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		HeightMapGenerator heightMapGenerator = new HeightMapGenerator(mapSize, seed, 6.0f, 32.0f,
-				32.0f, 10, 16.0f);
+		HeightMapGenerator heightMapGenerator = new HeightMapGenerator(mapSize, seed, 6.0f, 320.0f,
+				32.0f, 20, 160.0f);
 		heightMapGenerator.enablePrintInfo(true);
 				
 		final GUIManager gui = new GUIManager(heightMapGenerator);

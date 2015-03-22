@@ -41,7 +41,7 @@ public class HeightMapGenerator {
 	
 	
 	public HeightMapGenerator(int mapSize, int seed, float perlinNoiseFrequency,
-			float  perturbDistance, float perturbFrequency, int erodeIterations, 
+			float  perturbFrequency, float perturbDistance, int erodeIterations, 
 			float erodeSmoothness) {
 		this.mapSize = mapSize;
 		this.seed = seed;
@@ -86,37 +86,22 @@ public class HeightMapGenerator {
 	public BufferedImage generateRandomHeightMap() {
 		
 		Random r = new Random();
-		HeightMap heightMap = new HeightMap(mapSize, seed);
-		heightMap.addPerlinNoise(r.nextFloat()*r.nextInt(100));
-		heightMap.perturb(r.nextFloat()*r.nextInt(200), r.nextFloat()*r.nextInt(200));		
-		for(int i=0; i<r.nextInt(r.nextInt(200)+1); i++)
-			heightMap.erode(r.nextFloat()*r.nextInt());
-		heightMap.smoothen();
+		this.perlinNoiseFrequency = r.nextFloat()*r.nextInt(100);
+		this.perturbFrequency = r.nextFloat()*r.nextInt(200);
+		this.perturbDistance = r.nextFloat()*r.nextInt(200);
+		this.erodeIterations = r.nextInt(r.nextInt(200)+1);
+		this.erodeSmoothness = r.nextFloat()*r.nextInt();
 		
-		cachedHeightMapImage = new BufferedImage(
-				heightMap.getSize(),
-				heightMap.getSize(),
-				BufferedImage.TYPE_BYTE_GRAY );
-		
-		for(int i=0; i<heightMap.getSize(); i++) {
-			for(int j=0; j<heightMap.getSize(); j++) {
-				cachedHeightMapImage.setRGB(i, j, getColor(heightMap.getHeights()[i][j]));
-			}
-		}
-		
-		if(printInfo)
-			printInfo(heightMap);
-		
-		return cachedHeightMapImage;
+		return this.generateHeightMap();
 	}
 	
 	public BufferedImage generateSampleHeightMap() {
 		
 		HeightMap heightMap = new HeightMap(mapSize, seed);
 		heightMap.addPerlinNoise(6.0f);
-		heightMap.perturb(32.0f, 32.0f);		
-		for(int i=0; i<10; i++)
-			heightMap.erode(16.0f);
+		heightMap.perturb(320.0f, 32.0f);		
+		for(int i=0; i<20; i++)
+			heightMap.erode(160.0f);
 		heightMap.smoothen();
 		
 		cachedHeightMapImage = new BufferedImage(

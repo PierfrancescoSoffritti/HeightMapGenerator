@@ -61,6 +61,7 @@ public class MainWindowActionListener implements ActionListener {
 			}
 			
 			gui.getHeightMapGenerator().setMapSize(mapSize);
+			gui.getHeightMapGenerator().generateHeightMap();
 			gui.update();
 		}
 		if(id.equals(gui.SEED_TEXT_FIELD_ID)) {
@@ -74,6 +75,7 @@ public class MainWindowActionListener implements ActionListener {
 			}
 			
 			gui.getHeightMapGenerator().setSeed(seed);
+			gui.getHeightMapGenerator().generateHeightMap();
 			gui.update();
 		}		
 		if(id.equals(gui.PERLIN_FREQ_TEXT_FIELD_ID)) {
@@ -86,6 +88,7 @@ public class MainWindowActionListener implements ActionListener {
 			}
 			
 			gui.getHeightMapGenerator().setPerlinNoiseFrequency(perlinFreq);
+			gui.getHeightMapGenerator().generateHeightMap();
 			gui.update();			
 		}
 		if(id.equals(gui.PERTURB_FREQ_TEXT_FIELD_ID)) {
@@ -98,6 +101,7 @@ public class MainWindowActionListener implements ActionListener {
 			}
 			
 			gui.getHeightMapGenerator().setPerturbFrequency(perturbFreq);
+			gui.getHeightMapGenerator().generateHeightMap();
 			gui.update();
 		}
 		if(id.equals(gui.PERTURB_DIST_TEXT_FIELD_ID)) {
@@ -110,6 +114,7 @@ public class MainWindowActionListener implements ActionListener {
 			}
 			
 			gui.getHeightMapGenerator().setPerturbDistance(perturbDist);
+			gui.getHeightMapGenerator().generateHeightMap();
 			gui.update();
 		}
 		if(id.equals(gui.ERODE_ITER_TEXT_FIELD_ID)) {
@@ -122,6 +127,7 @@ public class MainWindowActionListener implements ActionListener {
 			}
 			
 			gui.getHeightMapGenerator().setErodeIterations(erodIter);
+			gui.getHeightMapGenerator().generateHeightMap();
 			gui.update();
 		}
 		if(id.equals(gui.ERODE_SMOOTH_TEXT_FIELD_ID)) {
@@ -134,11 +140,16 @@ public class MainWindowActionListener implements ActionListener {
 			}
 			
 			gui.getHeightMapGenerator().setErodeSmoothness(erodeSmooth);
+			gui.getHeightMapGenerator().generateHeightMap();
 			gui.update();
 		}
 		
 		if(id.equals(gui.SHOW_TOPOGRAPHY_BUTTON_ID)) {
 			gui.showTopographyWindow(1);			
+		}
+		if(id.equals(gui.RANDOM_GENERATION_BUTTON_ID)) {
+			gui.getHeightMapGenerator().generateRandomHeightMap();
+			gui.update();
 		}
 	}
 
