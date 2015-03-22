@@ -10,6 +10,11 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
+/**
+* MainWindowActionListener.java
+* @author Pierfrancesco Soffritti
+*
+*/
 
 public class MainWindowActionListener implements ActionListener {
 
@@ -45,6 +50,19 @@ public class MainWindowActionListener implements ActionListener {
 			}			
 		}
 		
+		if(id.equals(gui.SIZE_TEXT_FIELD_ID)) {
+			
+			int mapSize = 0;			
+			try {
+				String sValue = ((JTextField)c).getText();
+				mapSize = Integer.parseInt(sValue);
+			} catch (NumberFormatException exc) {
+				// handle -- todo
+			}
+			
+			gui.getHeightMapGenerator().setMapSize(mapSize);
+			gui.update();
+		}
 		if(id.equals(gui.SEED_TEXT_FIELD_ID)) {
 			
 			int seed = 0;			

@@ -16,9 +16,15 @@ import javax.swing.SwingConstants;
 
 import topography.GraysImageBorders;
 
+/**
+* GUIManager.java
+* @author Pierfrancesco Soffritti
+*
+*/
 
 public class GUIManager {
 	
+	public final String SIZE_TEXT_FIELD_ID = "SIZE_TEXT_FIELD_ID";
 	public final String PERLIN_FREQ_TEXT_FIELD_ID = "PERLIN_FREQ_TEXT_FIELD_ID";
 	public final String PERTURB_FREQ_TEXT_FIELD_ID = "PERTURB_FREQ_TEXT_FIELD_ID";
 	public final String PERTURB_DIST_TEXT_FIELD_ID = "PERTURB_DIST_TEXT_FIELD_ID";
@@ -73,6 +79,14 @@ public class GUIManager {
         controlsPanel.add(seedTextField);
         seedTextField.setName(SEED_TEXT_FIELD_ID);
         seedTextField.addActionListener(mainWindowActionListener);
+        
+        JLabel sizeLabel = new JLabel("Map size:", SwingConstants.CENTER);
+        JTextField sizeTextField = new JTextField(""+heightMapGenerator.getMapSize());
+        sizeTextField.setHorizontalAlignment(SwingConstants.CENTER);
+        controlsPanel.add(sizeLabel);
+        controlsPanel.add(sizeTextField);
+        sizeTextField.setName(SIZE_TEXT_FIELD_ID);
+        sizeTextField.addActionListener(mainWindowActionListener);
         
         JLabel perlinNoiseFreqLabel = new JLabel("Perlin noise frequency:", SwingConstants.CENTER);
         JTextField perlinNoiseFreqTextField = new JTextField(""+heightMapGenerator.getPerlinNoiseFrequency());
@@ -207,6 +221,7 @@ public class GUIManager {
         
         frame.invalidate();
         frame.revalidate();
+        frame.pack();
         frame.repaint();
 	}
 	

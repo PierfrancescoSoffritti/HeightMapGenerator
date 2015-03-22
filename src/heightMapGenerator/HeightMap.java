@@ -1,5 +1,11 @@
 package heightMapGenerator;
 
+/**
+* HeightMap.java
+* @author Pierfrancesco Soffritti
+*
+*/
+
 public class HeightMap {
 	
 	private float[][] heights;

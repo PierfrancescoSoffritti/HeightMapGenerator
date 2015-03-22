@@ -2,6 +2,12 @@ import heightMapGenerator.HeightMapGenerator;
 
 import GUI.GUIManager;
 
+/**
+* 
+* @author Pierfrancesco Soffritti
+*
+*/
+
 public class Main {
 	
 	private static final int mapSize = 512;

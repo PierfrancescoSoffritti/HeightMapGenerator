@@ -1,6 +1,11 @@
 package heightMapGenerator;
 import java.util.Random;
 
+/**
+* PerlinNoiseGenerator.java
+* @author Pierfrancesco Soffritti
+*
+*/
 
 public class PerlinNoiseGenerator {
 	private final int gradientSizeTable = 256;

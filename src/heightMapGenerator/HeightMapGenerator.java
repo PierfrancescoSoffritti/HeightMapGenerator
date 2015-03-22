@@ -2,6 +2,12 @@ package heightMapGenerator;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
+/**
+* HeightMapGenerator.java
+* @author Pierfrancesco Soffritti
+*
+*/
+
 public class HeightMapGenerator {
 	
 	private BufferedImage cachedHeightMapImage;
