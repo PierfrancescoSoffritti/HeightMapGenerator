@@ -19,12 +19,17 @@ import topography.GraysImageBorders;
 
 public class GUIManager {
 	
-	public final String SHOW_TOPOGRAPHY_BUTTON_ID = "showTopographyButton";
-	public final String SEED_TEXT_FIELD_ID = "seedTextField";
-	public final String SAVE_HEIGHTMAP_BUTTON_ID = "saveHeightMapButton";
+	public final String PERLIN_FREQ_TEXT_FIELD_ID = "PERLIN_FREQ_TEXT_FIELD_ID";
+	public final String PERTURB_FREQ_TEXT_FIELD_ID = "PERTURB_FREQ_TEXT_FIELD_ID";
+	public final String PERTURB_DIST_TEXT_FIELD_ID = "PERTURB_DIST_TEXT_FIELD_ID";
+	public final String ERODE_ITER_TEXT_FIELD_ID = "ERODE_ITER_TEXT_FIELD_ID";
+	public final String ERODE_SMOOTH_TEXT_FIELD_ID = "ERODE_SMOOTH_TEXT_FIELD_ID";
+	public final String SHOW_TOPOGRAPHY_BUTTON_ID = "SHOW_TOPOGRAPHY_BUTTON_ID";
+	public final String SEED_TEXT_FIELD_ID = "SEED_TEXT_FIELD_ID";
+	public final String SAVE_HEIGHTMAP_BUTTON_ID = "SAVE_HEIGHTMAP_BUTTON_ID";
 	
-	public final String THRESHOLD_TEXT_FIELD_ID = "thresholdTextField";
-	public final String SAVE_TOPOGRAPHY_BUTTON_ID = "saveTopographyButton";
+	public final String THRESHOLD_TEXT_FIELD_ID = "THRESHOLD_TEXT_FIELD_ID";
+	public final String SAVE_TOPOGRAPHY_BUTTON_ID = "SAVE_TOPOGRAPHY_BUTTON_ID";
 	
 	private final HeightMapGenerator heightMapGenerator;
 	
@@ -60,23 +65,65 @@ public class GUIManager {
         
         JPanel controlsPanel = new JPanel();
         controlsPanel.setLayout(new GridLayout(0,2));
+        
         JLabel seedLabel = new JLabel("seed:", SwingConstants.CENTER);
-        JTextField textField = new JTextField(""+heightMapGenerator.getSeed());
-        textField.setHorizontalAlignment(SwingConstants.CENTER);
+        JTextField seedTextField = new JTextField(""+heightMapGenerator.getSeed());
+        seedTextField.setHorizontalAlignment(SwingConstants.CENTER);
+        controlsPanel.add(seedLabel);
+        controlsPanel.add(seedTextField);
+        seedTextField.setName(SEED_TEXT_FIELD_ID);
+        seedTextField.addActionListener(mainWindowActionListener);
+        
+        JLabel perlinNoiseFreqLabel = new JLabel("Perlin noise frequency:", SwingConstants.CENTER);
+        JTextField perlinNoiseFreqTextField = new JTextField(""+heightMapGenerator.getPerlinNoiseFrequency());
+        perlinNoiseFreqTextField.setHorizontalAlignment(SwingConstants.CENTER);
+        controlsPanel.add(perlinNoiseFreqLabel);
+        controlsPanel.add(perlinNoiseFreqTextField);
+        perlinNoiseFreqTextField.setName(PERLIN_FREQ_TEXT_FIELD_ID);
+        perlinNoiseFreqTextField.addActionListener(mainWindowActionListener);
+        
+        JLabel perturbationFreqLabel = new JLabel("Perturbation frequency:", SwingConstants.CENTER);
+        JTextField perturbationFreqTextField = new JTextField(""+heightMapGenerator.getPerturbFrequency());
+        perturbationFreqTextField.setHorizontalAlignment(SwingConstants.CENTER);
+        controlsPanel.add(perturbationFreqLabel);
+        controlsPanel.add(perturbationFreqTextField);
+        perturbationFreqTextField.setName(PERTURB_FREQ_TEXT_FIELD_ID);
+        perturbationFreqTextField.addActionListener(mainWindowActionListener);
+        
+        JLabel perturbationDistanceLabel = new JLabel("Perturbation max distance:", SwingConstants.CENTER);
+        JTextField perturbationDistanceTextField = new JTextField(""+heightMapGenerator.getPerturbDistance());
+        perturbationDistanceTextField.setHorizontalAlignment(SwingConstants.CENTER);
+        controlsPanel.add(perturbationDistanceLabel);
+        controlsPanel.add(perturbationDistanceTextField);
+        perturbationDistanceTextField.setName(PERTURB_DIST_TEXT_FIELD_ID);
+        perturbationDistanceTextField.addActionListener(mainWindowActionListener);
+        
+        JLabel erodeIterationLabel = new JLabel("Erode iteration:", SwingConstants.CENTER);
+        JTextField erodeIterationTextField = new JTextField(""+heightMapGenerator.getErodeIterations());
+        erodeIterationTextField.setHorizontalAlignment(SwingConstants.CENTER);
+        controlsPanel.add(erodeIterationLabel);
+        controlsPanel.add(erodeIterationTextField);
+        erodeIterationTextField.setName(ERODE_ITER_TEXT_FIELD_ID);
+        erodeIterationTextField.addActionListener(mainWindowActionListener);
+        
+        JLabel erodeSmoothnessLabel = new JLabel("Erode smoothness:", SwingConstants.CENTER);
+        JTextField erodeSmoothnessTextField = new JTextField(""+heightMapGenerator.getErodeSmoothness());
+        erodeSmoothnessTextField.setHorizontalAlignment(SwingConstants.CENTER);
+        controlsPanel.add(erodeSmoothnessLabel);
+        controlsPanel.add(erodeSmoothnessTextField);
+        erodeSmoothnessTextField.setName(ERODE_SMOOTH_TEXT_FIELD_ID);
+        erodeSmoothnessTextField.addActionListener(mainWindowActionListener);
+        
         JButton showTopographyButton = new JButton("Show topographic map");
         JButton saveHeightMapButton = new JButton("Save heightmap");
-        controlsPanel.add(seedLabel);
-        controlsPanel.add(textField);
         controlsPanel.add(showTopographyButton);
         controlsPanel.add(saveHeightMapButton);
-        container.add(controlsPanel, BorderLayout.PAGE_END);
-        
         showTopographyButton.setName(SHOW_TOPOGRAPHY_BUTTON_ID);
-        showTopographyButton.addActionListener(mainWindowActionListener);
-        textField.setName(SEED_TEXT_FIELD_ID);
-        textField.addActionListener(mainWindowActionListener);
+        showTopographyButton.addActionListener(mainWindowActionListener);        
         saveHeightMapButton.setName(SAVE_HEIGHTMAP_BUTTON_ID);
         saveHeightMapButton.addActionListener(mainWindowActionListener);
+        
+        container.add(controlsPanel, BorderLayout.PAGE_END);
 	}
 	
 	public void showMainWindow() {

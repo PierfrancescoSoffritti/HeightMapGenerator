@@ -24,20 +24,6 @@ public class MainWindowActionListener implements ActionListener {
 		Component c = (Component) e.getSource();
 		String id = c.getName();
 		
-		if(id.equals(gui.SEED_TEXT_FIELD_ID)) {
-			
-			int seed = 0;			
-			try {
-				String sValue = ((JTextField)c).getText();
-				seed = Integer.parseInt(sValue);
-			} catch (NumberFormatException exc) {
-				// handle -- todo
-			}
-			
-			gui.getHeightMapGenerator().setSeed(seed);
-			gui.update();
-		}
-		
 		if(id.equals(gui.SAVE_HEIGHTMAP_BUTTON_ID)) {
 			// parent component of the dialog
 			JFrame parentFrame = new JFrame();
@@ -57,6 +43,80 @@ public class MainWindowActionListener implements ActionListener {
 					exc.printStackTrace();
 				}
 			}			
+		}
+		
+		if(id.equals(gui.SEED_TEXT_FIELD_ID)) {
+			
+			int seed = 0;			
+			try {
+				String sValue = ((JTextField)c).getText();
+				seed = Integer.parseInt(sValue);
+			} catch (NumberFormatException exc) {
+				// handle -- todo
+			}
+			
+			gui.getHeightMapGenerator().setSeed(seed);
+			gui.update();
+		}		
+		if(id.equals(gui.PERLIN_FREQ_TEXT_FIELD_ID)) {
+			float perlinFreq = 0;			
+			try {
+				String sValue = ((JTextField)c).getText();
+				perlinFreq = Float.parseFloat(sValue);
+			} catch (NumberFormatException exc) {
+				// handle -- todo
+			}
+			
+			gui.getHeightMapGenerator().setPerlinNoiseFrequency(perlinFreq);
+			gui.update();			
+		}
+		if(id.equals(gui.PERTURB_FREQ_TEXT_FIELD_ID)) {
+			float perturbFreq = 0;			
+			try {
+				String sValue = ((JTextField)c).getText();
+				perturbFreq = Float.parseFloat(sValue);
+			} catch (NumberFormatException exc) {
+				// handle -- todo
+			}
+			
+			gui.getHeightMapGenerator().setPerturbFrequency(perturbFreq);
+			gui.update();
+		}
+		if(id.equals(gui.PERTURB_DIST_TEXT_FIELD_ID)) {
+			float perturbDist = 0;			
+			try {
+				String sValue = ((JTextField)c).getText();
+				perturbDist = Float.parseFloat(sValue);
+			} catch (NumberFormatException exc) {
+				// handle -- todo
+			}
+			
+			gui.getHeightMapGenerator().setPerturbDistance(perturbDist);
+			gui.update();
+		}
+		if(id.equals(gui.ERODE_ITER_TEXT_FIELD_ID)) {
+			int erodIter = 0;			
+			try {
+				String sValue = ((JTextField)c).getText();
+				erodIter = Integer.parseInt(sValue);
+			} catch (NumberFormatException exc) {
+				// handle -- todo
+			}
+			
+			gui.getHeightMapGenerator().setErodeIterations(erodIter);
+			gui.update();
+		}
+		if(id.equals(gui.ERODE_SMOOTH_TEXT_FIELD_ID)) {
+			float erodeSmooth = 0;			
+			try {
+				String sValue = ((JTextField)c).getText();
+				erodeSmooth = Float.parseFloat(sValue);
+			} catch (NumberFormatException exc) {
+				// handle -- todo
+			}
+			
+			gui.getHeightMapGenerator().setErodeSmoothness(erodeSmooth);
+			gui.update();
 		}
 		
 		if(id.equals(gui.SHOW_TOPOGRAPHY_BUTTON_ID)) {
