@@ -1,8 +1,10 @@
+package heightMapGenerator;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class HeightMapGenerator {
 	
+	private BufferedImage cachedHeightMapImage;
 	private int mapSize;
 	private int seed;
 	
@@ -58,21 +60,21 @@ public class HeightMapGenerator {
 			heightMap.erode(erodeSmoothness);
 		heightMap.smoothen();
 		
-		BufferedImage heightMapImage = new BufferedImage(
+		cachedHeightMapImage = new BufferedImage(
 				heightMap.getSize(),
 				heightMap.getSize(),
 				BufferedImage.TYPE_BYTE_GRAY );
 		
 		for(int i=0; i<heightMap.getSize(); i++) {
 			for(int j=0; j<heightMap.getSize(); j++) {
-				heightMapImage.setRGB(i, j, getColor(heightMap.getHeights()[i][j]));
+				cachedHeightMapImage.setRGB(i, j, getColor(heightMap.getHeights()[i][j]));
 			}
 		}
 		
 		if(printInfo)
 			printInfo(heightMap);
 		
-		return heightMapImage;
+		return cachedHeightMapImage;
 	}
 	
 	public BufferedImage generateRandomHeightMap() {
@@ -85,21 +87,21 @@ public class HeightMapGenerator {
 			heightMap.erode(r.nextFloat()*r.nextInt());
 		heightMap.smoothen();
 		
-		BufferedImage heightMapImage = new BufferedImage(
+		cachedHeightMapImage = new BufferedImage(
 				heightMap.getSize(),
 				heightMap.getSize(),
 				BufferedImage.TYPE_BYTE_GRAY );
 		
 		for(int i=0; i<heightMap.getSize(); i++) {
 			for(int j=0; j<heightMap.getSize(); j++) {
-				heightMapImage.setRGB(i, j, getColor(heightMap.getHeights()[i][j]));
+				cachedHeightMapImage.setRGB(i, j, getColor(heightMap.getHeights()[i][j]));
 			}
 		}
 		
 		if(printInfo)
 			printInfo(heightMap);
 		
-		return heightMapImage;
+		return cachedHeightMapImage;
 	}
 	
 	public BufferedImage generateSampleHeightMap() {
@@ -111,21 +113,21 @@ public class HeightMapGenerator {
 			heightMap.erode(16.0f);
 		heightMap.smoothen();
 		
-		BufferedImage heightMapImage = new BufferedImage(
+		cachedHeightMapImage = new BufferedImage(
 				heightMap.getSize(),
 				heightMap.getSize(),
 				BufferedImage.TYPE_BYTE_GRAY );
 		
 		for(int i=0; i<heightMap.getSize(); i++) {
 			for(int j=0; j<heightMap.getSize(); j++) {
-				heightMapImage.setRGB(i, j, getColor(heightMap.getHeights()[i][j]));
+				cachedHeightMapImage.setRGB(i, j, getColor(heightMap.getHeights()[i][j]));
 			}
 		}
 		
 		if(printInfo)
 			printInfo(heightMap);
 		
-		return heightMapImage;
+		return cachedHeightMapImage;
 	}
 	
 	private static int getColor(float f) {
@@ -157,6 +159,10 @@ public class HeightMapGenerator {
 		
 		System.out.println(res);
 		return res;
+	}
+	
+	public BufferedImage getCachedHeightMapImage() {
+		return this.cachedHeightMapImage;
 	}
 	
 	public boolean isPrintInfoEnabled() {

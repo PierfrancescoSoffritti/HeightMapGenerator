@@ -1,3 +1,4 @@
+package heightMapGenerator;
 import java.util.Random;
 
 

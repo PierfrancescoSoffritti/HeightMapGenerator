@@ -1,3 +1,4 @@
+package heightMapGenerator;
 
 public class HeightMap {
 	
