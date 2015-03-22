@@ -24,23 +24,11 @@ public class Main {
 	private static int seed = 1;
 
 	public static void main(String[] args) {
-		HeightMap heightMap = new HeightMap(mapSize, seed);
-		heightMap.addPerlinNoise(6.0f);
-		heightMap.perturb(32.0f, 32.0f);		
-		for(int i=0; i<10; i++)
-			heightMap.erode(16.0f);
-		heightMap.smoothen();
 		
-		BufferedImage heightMapImage = new BufferedImage(
-				heightMap.getSize(),
-				heightMap.getSize(),
-				BufferedImage.TYPE_BYTE_GRAY );
-		
-		for(int i=0; i<heightMap.getSize(); i++) {
-			for(int j=0; j<heightMap.getSize(); j++) {
-				heightMapImage.setRGB(i, j, getColor(heightMap.getHeights()[i][j]));
-			}
-		}
+		HeightMapGenerator heightMapGenerator = new HeightMapGenerator(mapSize, seed, 6.0f, 32.0f,
+				32.0f, 10, 16.0f);
+		heightMapGenerator.enablePrintInfo(true);
+		BufferedImage heightMapImage = heightMapGenerator.generateHeightMap();
 		
 		initGUI(heightMapImage);
 		
@@ -51,8 +39,6 @@ public class Main {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		printInfo(heightMap);
 	}
 
 	private static void initGUI(BufferedImage heightMapImage) {
@@ -90,20 +76,6 @@ public class Main {
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-	}
-
-	private static void printInfo(HeightMap heightMap) {
-		//System.out.println(heightMap);
-		float min = 1000, max = -1000;
-		for(int i=0; i<heightMap.getSize(); i++) {
-			for(int j=0; j<heightMap.getSize(); j++) {
-				if(heightMap.getHeights()[i][j] < min)
-					min = heightMap.getHeights()[i][j];
-				if(heightMap.getHeights()[i][j] > max)
-					max = heightMap.getHeights()[i][j];
-			}
-		}
-		System.out.println("min: " +min +"  max: " +max);
 	}
 
 	private static int getColor(float f) {

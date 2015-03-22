@@ -3,14 +3,14 @@ public class HeightMap {
 	
 	private float[][] heights;
 	private int size;
-	private PerlinGenerator perlin;
+	private PerlinNoiseGenerator perlin;
 	
 	// size = 512
 	public HeightMap(int size, int seed) {
 		this.size = size;
 		this.heights = new float[size][size];
 		
-		this.perlin = new PerlinGenerator(seed);
+		this.perlin = new PerlinNoiseGenerator(seed);
 	}
 	
 	public void addPerlinNoise(float f) {
@@ -23,10 +23,10 @@ public class HeightMap {
 	
 	/*
 	* this step displaces the height elements according to another Perlin noise map
-	*  with a much higher frequency. It is very similar to creating an ocean wave effect.
+	* with a much higher frequency. It is very similar to creating an ocean wave effect.
 	*  
-	*  The d parameter determines the maximum distance an element can move. 
-	*  The f parameter is again the frequency. 
+	* The d parameter determines the maximum distance an element can move. 
+	* The f parameter is again the frequency. 
 	*/
 	public void perturb(float f, float d) {
 		int u, v;
@@ -117,11 +117,11 @@ public class HeightMap {
 		return this.size;
 	}
 	
-	public PerlinGenerator getPerlinGenerator() {
+	public PerlinNoiseGenerator getPerlinGenerator() {
 		return this.perlin;
 	}
 	
-	public void setPerlinGenerator(PerlinGenerator perlin) {
+	public void setPerlinGenerator(PerlinNoiseGenerator perlin) {
 		this.perlin = perlin;
 	}
 	

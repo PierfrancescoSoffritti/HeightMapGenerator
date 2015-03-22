@@ -1,7 +1,7 @@
 import java.util.Random;
 
 
-public class PerlinGenerator {
+public class PerlinNoiseGenerator {
 	private final int gradientSizeTable = 256;
 	private Random random;
 	private float[] gradients = new float[gradientSizeTable * 3];
@@ -29,7 +29,7 @@ public class PerlinGenerator {
 			137, 214, 145, 93, 92, 100, 245, 0, 216, 186, 60, 83, 105, 97, 204, 52
 			};
 	
-	public PerlinGenerator(int seed) {
+	public PerlinNoiseGenerator(int seed) {
 		random = new Random(seed);
 		initGradients();
 	}
