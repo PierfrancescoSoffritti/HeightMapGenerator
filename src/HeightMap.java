@@ -6,11 +6,11 @@ public class HeightMap {
 	private PerlinGenerator perlin;
 	
 	// size = 512
-	public HeightMap(int size) {
+	public HeightMap(int size, int seed) {
 		this.size = size;
 		this.heights = new float[size][size];
 		
-		this.perlin = new PerlinGenerator(100);
+		this.perlin = new PerlinGenerator(seed);
 	}
 	
 	public void addPerlinNoise(float f) {
