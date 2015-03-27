@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -33,6 +34,7 @@ public class GUIManager {
 	public final String SHOW_TOPOGRAPHY_BUTTON_ID = "SHOW_TOPOGRAPHY_BUTTON_ID";
 	public final String SEED_TEXT_FIELD_ID = "SEED_TEXT_FIELD_ID";
 	public final String SAVE_HEIGHTMAP_BUTTON_ID = "SAVE_HEIGHTMAP_BUTTON_ID";
+	public final String USE_GRAY_SCALE_CB_ID = "USE_GRAY_SCALE_CB_ID";
 	
 	public final String RANDOM_GENERATION_BUTTON_ID = "RANDOM_GENERATION_BUTTON_ID";
 	
@@ -53,6 +55,7 @@ public class GUIManager {
 	private JTextField perturbationDistanceTextField;
 	private JTextField erodeIterationTextField;
 	private JTextField erodeSmoothnessTextField;
+	private JLabel minMaxValueLabel;
 	
 	private JFrame topographyFrame;
 	private JPanel topographyImagePanel;
@@ -137,6 +140,16 @@ public class GUIManager {
         controlsPanel.add(erodeSmoothnessTextField);
         erodeSmoothnessTextField.setName(ERODE_SMOOTH_TEXT_FIELD_ID);
         erodeSmoothnessTextField.addActionListener(mainWindowActionListener);
+        
+        JCheckBox useGrayScaleCheckBox = new JCheckBox("Use gray scale");
+        useGrayScaleCheckBox.setSelected(true);
+        useGrayScaleCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
+        controlsPanel.add(useGrayScaleCheckBox);
+        useGrayScaleCheckBox.setName(USE_GRAY_SCALE_CB_ID);
+        useGrayScaleCheckBox.addActionListener(mainWindowActionListener);
+        
+         minMaxValueLabel = new JLabel("Info:  " +heightMapGenerator.getMapInfo());
+        controlsPanel.add(minMaxValueLabel);
         
         JButton showTopographyButton = new JButton("Show topographic map");
         JButton saveHeightMapButton = new JButton("Save heightmap");
@@ -241,6 +254,7 @@ public class GUIManager {
     	perturbationDistanceTextField.setText(heightMapGenerator.getPerturbDistance()+"");
     	erodeIterationTextField.setText(heightMapGenerator.getErodeIterations()+"");
     	erodeSmoothnessTextField.setText(heightMapGenerator.getErodeSmoothness()+"");
+    	minMaxValueLabel.setText("Info:  " +heightMapGenerator.getMapInfo());
         
         frame.invalidate();
         frame.revalidate();

@@ -50,6 +50,16 @@ public class MainWindowActionListener implements ActionListener {
 			}			
 		}
 		
+		if(id.equals(gui.USE_GRAY_SCALE_CB_ID)) {
+			if(gui.getHeightMapGenerator().getUseGrayScale() == true)
+				gui.getHeightMapGenerator().setUseGrayScale(false);
+			else
+				gui.getHeightMapGenerator().setUseGrayScale(true);
+			
+			gui.getHeightMapGenerator().generateHeightMap();
+			gui.update();
+		}
+		
 		if(id.equals(gui.SIZE_TEXT_FIELD_ID)) {
 			
 			int mapSize = 0;			
