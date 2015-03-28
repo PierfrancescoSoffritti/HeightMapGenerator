@@ -10,12 +10,15 @@ public class HeightMap {
 	
 	private float[][] heights;
 	private int size;
+	
+	private int seed;
 	private PerlinNoiseGenerator perlin;
 	
 	// size = 512
 	public HeightMap(int size, int seed) {
 		this.size = size;
 		this.heights = new float[size][size];
+		this.seed = seed;
 		
 		this.perlin = new PerlinNoiseGenerator(seed);
 	}
@@ -26,6 +29,14 @@ public class HeightMap {
 				heights[i][j] += perlin.noise(f * i / (float)size, f * j / (float)size, 0);
 			}
 		}
+	}
+	
+	// this function uses a different Perlin noise generator. It is more heavy and the results are not so good.
+	// i've introduced it only for testing purpose.
+	// note that at the moment it is initializating a new heightMap each time it is called, unlike the 'addPerlinNoise' function.
+	public void initPerlinNoise2(int octaveCount, float noisePersistance) {
+		PerlinNoiseGenerator2 perlin2 = new PerlinNoiseGenerator2();
+		heights = perlin2.generatePerlinNoise(perlin2.generateWhiteNoise(size, size, seed), octaveCount, noisePersistance);
 	}
 	
 	/*

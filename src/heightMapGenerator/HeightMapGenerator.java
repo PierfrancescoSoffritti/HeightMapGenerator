@@ -65,8 +65,10 @@ public class HeightMapGenerator {
 	public BufferedImage generateHeightMap() {
 		
 		HeightMap heightMap = new HeightMap(mapSize, seed);
+		// testing
+		//heightMap.initPerlinNoise2(7, 0.5f);
 		heightMap.addPerlinNoise(perlinNoiseFrequency);
-		heightMap.perturb(perturbFrequency, perturbDistance);		
+		heightMap.perturb(perturbFrequency, perturbDistance);
 		for(int i=0; i<erodeIterations; i++)
 			heightMap.erode(erodeSmoothness);
 		heightMap.smoothen();
