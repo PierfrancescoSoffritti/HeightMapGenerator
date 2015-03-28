@@ -1,4 +1,8 @@
-package heightMapGenerator;
+package heightMap;
+
+import noise.perlin.PerlinNoiseGenerator;
+import noise.perlin.PerlinNoiseGenerator2;
+import noise.simplex.SimplexNoise;
 
 /**
 * HeightMap.java
@@ -37,6 +41,28 @@ public class HeightMap {
 	public void initPerlinNoise2(int octaveCount, float noisePersistance) {
 		PerlinNoiseGenerator2 perlin2 = new PerlinNoiseGenerator2();
 		heights = perlin2.generatePerlinNoise(perlin2.generateWhiteNoise(size, size, seed), octaveCount, noisePersistance);
+	}
+	
+	public void addSimplexNoise(int largestFeature, double persistence) {
+		
+		SimplexNoise simplexNoise = new SimplexNoise(largestFeature, persistence, seed);
+		double xStart=0;
+		double XEnd=500;
+		double yStart=0;
+		double yEnd=500;
+		
+		//int xResolution=200;
+		//int yResolution=200;
+		
+		//double[][] result=new double[xResolution][yResolution];
+		
+		for(int i=0; i<size; i++) {
+			for(int j=0; j<size; j++) {
+				int x = (int)(xStart+i*((XEnd-xStart)/size));
+				int y = (int)(yStart+j*((yEnd-yStart)/size));
+				heights[i][j] += (float) ( 0.5*(1+simplexNoise.getNoise2D(x,y)) );
+			}
+		}
 	}
 	
 	/*

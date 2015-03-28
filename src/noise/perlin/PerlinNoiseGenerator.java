@@ -1,4 +1,4 @@
-package heightMapGenerator;
+package noise.perlin;
 import java.util.Random;
 
 /**

@@ -1,54 +1,28 @@
-package heightMapGenerator;
+package heightMap;
+
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
 /**
-* HeightMapGenerator.java
+* PerlinHeightMapGenerator.java
 * @author Pierfrancesco Soffritti
 *
 */
 
-public class HeightMapGenerator {
-	
-	private BufferedImage cachedHeightMapImage;
-	private int mapSize;
-	private int seed;
-	
+public class PerlinHeightMapGenerator extends AbstractHeightMapGenerator {
+
 	private float perlinNoiseFrequency;
-	
-	private float perturbDistance;
-	private float perturbFrequency;
-	
-	private int erodeIterations;
-	private float erodeSmoothness;
-	
-	private boolean useGrayScale;
-	private boolean printInfo;
-	
-	private float min, max;
-	
-	public HeightMapGenerator(int mapSize, int seed) {
-		this.mapSize = mapSize;
-		this.seed = seed;
+
+	public PerlinHeightMapGenerator(int mapSize, int seed) {
+		super(mapSize, seed);
 		
 		this.perlinNoiseFrequency = 0;
-		
-		this.perturbDistance = 0;
-		this.perturbFrequency = 0;
-		
-		this.erodeIterations = 0;
-		this.erodeSmoothness = 0;
-		
-		useGrayScale = true;
-		printInfo = false;
 	}
 	
-	
-	public HeightMapGenerator(int mapSize, int seed, float perlinNoiseFrequency,
+	public PerlinHeightMapGenerator(int mapSize, int seed, float perlinNoiseFrequency,
 			float  perturbFrequency, float perturbDistance, int erodeIterations, 
 			float erodeSmoothness) {
-		this.mapSize = mapSize;
-		this.seed = seed;
+		super(mapSize, seed);
 		
 		this.perlinNoiseFrequency = perlinNoiseFrequency;
 		
@@ -57,14 +31,13 @@ public class HeightMapGenerator {
 		
 		this.erodeIterations = erodeIterations;
 		this.erodeSmoothness = erodeSmoothness;
-		
-		useGrayScale = true;
-		printInfo = false;
 	}
 	
+	@Override
 	public BufferedImage generateHeightMap() {
 		
 		HeightMap heightMap = new HeightMap(mapSize, seed);
+		//System.out.println(heightMap.toString());
 		// testing
 		//heightMap.initPerlinNoise2(7, 0.5f);
 		heightMap.addPerlinNoise(perlinNoiseFrequency);
@@ -94,6 +67,7 @@ public class HeightMapGenerator {
 		return cachedHeightMapImage;
 	}
 	
+	@Override
 	public BufferedImage generateRandomHeightMap() {
 		
 		Random r = new Random();
@@ -106,6 +80,7 @@ public class HeightMapGenerator {
 		return this.generateHeightMap();
 	}
 	
+	@Override
 	public BufferedImage generateSampleHeightMap() {
 		
 		this.perlinNoiseFrequency = 6.0f;
@@ -117,7 +92,8 @@ public class HeightMapGenerator {
 		return this.generateHeightMap();
 	}
 	
-	private int getColor(float f) {
+	@Override
+	protected int getColor(float f) {
 		
 		// ?? naive solution
 		//int value = (int) ((f+0.5) * 255);
@@ -169,113 +145,12 @@ public class HeightMapGenerator {
 		
 		return color;
 	}
-	
-	private void setMapInfo(HeightMap heightMap) {
-		min = 1000;
-		max = -1000;
-		for(int i=0; i<heightMap.getSize(); i++) {
-			for(int j=0; j<heightMap.getSize(); j++) {
-				if(heightMap.getHeights()[i][j] < min)
-					min = heightMap.getHeights()[i][j];
-				if(heightMap.getHeights()[i][j] > max)
-					max = heightMap.getHeights()[i][j];
-			}
-		}
-	}
-	
-	public String getMapInfo() {		
-		String res = "min: " +min +"  max: " +max;
-		return res;
-	}
-	
-	public BufferedImage getCachedHeightMapImage() {
-		return this.cachedHeightMapImage;
-	}
-	
-	public boolean getUseGrayScale() {
-		return useGrayScale;
-	}
-	
-	public void setUseGrayScale(boolean useGrayScale) {
-		this.useGrayScale = useGrayScale;
-	}
-	
-	public boolean isPrintInfoEnabled() {
-		return printInfo;
-	}
-	
-	public void enablePrintInfo(boolean printInfo) {
-		this.printInfo = printInfo;
-	}
-
-
-	public int getMapSize() {
-		return mapSize;
-	}
-
-
-	public void setMapSize(int mapSize) {
-		this.mapSize = mapSize;
-	}
-
-
-	public int getSeed() {
-		return seed;
-	}
-
-
-	public void setSeed(int seed) {
-		this.seed = seed;
-	}
-
 
 	public float getPerlinNoiseFrequency() {
 		return perlinNoiseFrequency;
 	}
 
-
 	public void setPerlinNoiseFrequency(float perlinNoiseFrequency) {
 		this.perlinNoiseFrequency = perlinNoiseFrequency;
 	}
-
-
-	public float getPerturbDistance() {
-		return perturbDistance;
-	}
-
-
-	public void setPerturbDistance(float perturbDistance) {
-		this.perturbDistance = perturbDistance;
-	}
-
-
-	public float getPerturbFrequency() {
-		return perturbFrequency;
-	}
-
-
-	public void setPerturbFrequency(float perturbFrequency) {
-		this.perturbFrequency = perturbFrequency;
-	}
-
-
-	public int getErodeIterations() {
-		return erodeIterations;
-	}
-
-
-	public void setErodeIterations(int erodeIterations) {
-		this.erodeIterations = erodeIterations;
-	}
-
-
-	public float getErodeSmoothness() {
-		return erodeSmoothness;
-	}
-
-
-	public void setErodeSmoothness(float erodeSmoothness) {
-		this.erodeSmoothness = erodeSmoothness;
-	}
-
 }
