@@ -22,6 +22,7 @@ public abstract class AbstractHeightMapGenerator {
 	
 	protected boolean useGrayScale;
 	protected boolean printInfo;
+	protected boolean useHSBScale;
 	
 	protected float min, max;
 	
@@ -41,7 +42,8 @@ public abstract class AbstractHeightMapGenerator {
 	
 	public abstract BufferedImage generateHeightMap();	
 	public abstract BufferedImage generateRandomHeightMap();	
-	public abstract BufferedImage generateSampleHeightMap();	
+	public abstract BufferedImage generateSampleHeightMap();
+	
 	protected abstract int getColor(float f);
 	
 	protected void setMapInfo(HeightMap heightMap) {
@@ -143,5 +145,13 @@ public abstract class AbstractHeightMapGenerator {
 
 	public void setErodeSmoothness(float erodeSmoothness) {
 		this.erodeSmoothness = erodeSmoothness;
+	}
+
+	public boolean isUseHSBScale() {
+		return useHSBScale;
+	}
+
+	public void setUseHSBScale(boolean useHSBScale) {
+		this.useHSBScale = useHSBScale;
 	}
 }
