@@ -57,8 +57,7 @@ public class HeightMapWebSocketServer extends WebSocketServer {
     	readyToSend = true;
     	this.ws = ws;
     	status = "Ready";
-    	System.out.println(status);
-    	
+    	System.out.println(status);    	
     }
     
     public boolean sendHeightMap(float heightMap[][]) {
