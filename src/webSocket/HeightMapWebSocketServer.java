@@ -21,7 +21,7 @@ public class HeightMapWebSocketServer extends WebSocketServer {
 
     public HeightMapWebSocketServer(int port) throws UnknownHostException {
         super(new InetSocketAddress(port));
-        System.out.println("Websocket server running... Listning on port " + port);
+        System.out.println("Websocket server running... Listening on port " + port);
         readyToSend = false;
         status = "Disconnected";
     }
