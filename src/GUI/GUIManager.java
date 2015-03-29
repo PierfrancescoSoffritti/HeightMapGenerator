@@ -10,7 +10,11 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
+import webSocket.HeightMapWebSocketServer;
 import GUI.listeners.MainWindowActionListener;
 
 /**
@@ -23,23 +27,27 @@ public class GUIManager {
 	public final static String GUI_NAMES_LIST_BUTTON_ID = "GUI_NAMES_LIST_BUTTON_ID";
 	public final static String SAVE_HEIGHTMAP_BUTTON_ID = "SAVE_HEIGHTMAP_BUTTON_ID";
 	public final static String SHOW_TOPOGRAPHY_BUTTON_ID = "SHOW_TOPOGRAPHY_BUTTON_ID";
+	public final static String SEND_HEIGHTMAP_BUTTON_ID = "SEND_HEIGHTMAP_BUTTON_ID";
 	
 	private ArrayList<GUI> GUIList;
 	private int currentGUI;
 	private JPanel currentGUIPanel;
-	
+	private JLabel socketStatusLabel;
 	private JFrame frame;
 	
 	private MainWindowActionListener mainWindowActionListener;
+	private HeightMapWebSocketServer ws;
 	
-	public GUIManager(ArrayList<AbstractHeightMapGenerator> heightMapGenerators) {
+	public GUIManager(ArrayList<AbstractHeightMapGenerator> heightMapGenerators, HeightMapWebSocketServer ws) {
 		
 		GUIList = new ArrayList<GUI>();
+		
+		this.ws = ws;
 		
 		for(int i=0; i<heightMapGenerators.size(); i++)
 			GUIList.add(GUIFactory.getGUI(this, heightMapGenerators.get(i)));
 		
-		this.currentGUI = 1;
+		this.currentGUI = 0;
 		
 		mainWindowActionListener = new MainWindowActionListener(this);
 		initMainWindow();
@@ -77,6 +85,30 @@ public class GUIManager {
         showTopographyButton.addActionListener(mainWindowActionListener);        
         saveHeightMapButton.setName(SAVE_HEIGHTMAP_BUTTON_ID);
         saveHeightMapButton.addActionListener(mainWindowActionListener);
+        
+        JButton sendHeightMapToSocketButton = new JButton("Send heightmap to WebSocket");
+        controlsPanel.add(sendHeightMapToSocketButton);
+        sendHeightMapToSocketButton.setName(SEND_HEIGHTMAP_BUTTON_ID);
+        sendHeightMapToSocketButton.addActionListener(mainWindowActionListener);        
+        saveHeightMapButton.setName(SAVE_HEIGHTMAP_BUTTON_ID);
+        
+        socketStatusLabel = new JLabel("Socket status: " +ws.getStatus(), SwingConstants.CENTER);
+        controlsPanel.add(socketStatusLabel);
+        
+        Thread checker = new Thread(){
+        	@Override
+        	public void run() {
+        		while(true) {
+        			socketStatusLabel.setText("Socket status: " +ws.getStatus());
+        			try {
+						sleep(1500);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+        		}        		
+        	}
+        };        
+        checker.start();
         
         container.add(controlsPanel, BorderLayout.PAGE_END);
 	}
@@ -123,5 +155,9 @@ public class GUIManager {
 	
 	public int getCurrentGUIIndex() {
 		return currentGUI;
+	}
+
+	public void sendHeightMap() {
+		ws.sendHeightMap(getCurrentGUI().getHeightMapGenerator().getCachedHeightMap().getHeights());
 	}
 }

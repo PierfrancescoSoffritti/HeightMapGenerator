@@ -10,6 +10,8 @@ import java.awt.image.BufferedImage;
 public abstract class AbstractHeightMapGenerator {
 	
 	protected BufferedImage cachedHeightMapImage;
+	protected HeightMap cachedHeightMap;
+	
 	protected int mapSize;
 	protected int seed;
 	
@@ -58,6 +60,10 @@ public abstract class AbstractHeightMapGenerator {
 	public String getMapInfo() {		
 		String res = "min: " +min +"  max: " +max;
 		return res;
+	}
+	
+	public HeightMap getCachedHeightMap() {
+		return this.cachedHeightMap;
 	}
 	
 	public BufferedImage getCachedHeightMapImage() {

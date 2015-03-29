@@ -50,7 +50,7 @@ public class SimplexNoise {
         return result;
     }
 
-    public double getNoise3D(int x,int y, int z) {
+    public double getNoise3D(int x, int y, int z) {
         double result=0;
         for(int i=0;i<octaves.length;i++) {
           double frequency = Math.pow(2,i);

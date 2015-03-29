@@ -62,6 +62,9 @@ public class MainWindowActionListener implements ActionListener {
 			if(selected != guiManager.getCurrentGUIIndex())
 				guiManager.setCurrentGUI(selected);
 		}
+		if(id.equals(GUIManager.SEND_HEIGHTMAP_BUTTON_ID)) {
+			guiManager.sendHeightMap();
+		}
 	}
 
 }

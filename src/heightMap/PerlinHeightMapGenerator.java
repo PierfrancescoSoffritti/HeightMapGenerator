@@ -36,28 +36,28 @@ public class PerlinHeightMapGenerator extends AbstractHeightMapGenerator {
 	@Override
 	public BufferedImage generateHeightMap() {
 		
-		HeightMap heightMap = new HeightMap(mapSize, seed);
+		cachedHeightMap = new HeightMap(mapSize, seed);
 		//System.out.println(heightMap.toString());
 		// testing
 		//heightMap.initPerlinNoise2(7, 0.5f);
-		heightMap.addPerlinNoise(perlinNoiseFrequency);
-		heightMap.perturb(perturbFrequency, perturbDistance);
+		cachedHeightMap.addPerlinNoise(perlinNoiseFrequency);
+		cachedHeightMap.perturb(perturbFrequency, perturbDistance);
 		for(int i=0; i<erodeIterations; i++)
-			heightMap.erode(erodeSmoothness);
-		heightMap.smoothen();
+			cachedHeightMap.erode(erodeSmoothness);
+		cachedHeightMap.smoothen();
 		
 		int imageType = (useGrayScale == true ? BufferedImage.TYPE_BYTE_GRAY : BufferedImage.TYPE_INT_RGB);
 		
 		cachedHeightMapImage = new BufferedImage(
-				heightMap.getSize(),
-				heightMap.getSize(),
+				cachedHeightMap.getSize(),
+				cachedHeightMap.getSize(),
 				imageType );
 		
-		setMapInfo(heightMap);
+		setMapInfo(cachedHeightMap);
 		
-		for(int i=0; i<heightMap.getSize(); i++) {
-			for(int j=0; j<heightMap.getSize(); j++) {
-				cachedHeightMapImage.setRGB(i, j, getColor(heightMap.getHeights()[i][j]));
+		for(int i=0; i<cachedHeightMap.getSize(); i++) {
+			for(int j=0; j<cachedHeightMap.getSize(); j++) {
+				cachedHeightMapImage.setRGB(i, j, getColor(cachedHeightMap.getHeights()[i][j]));
 			}
 		}
 		
