@@ -37,6 +37,7 @@ public abstract class AbstractHeightMapGenerator {
 		this.erodeSmoothness = 0;
 		
 		useGrayScale = true;
+		useHSBScale=false;
 		printInfo = false;
 	}
 	
