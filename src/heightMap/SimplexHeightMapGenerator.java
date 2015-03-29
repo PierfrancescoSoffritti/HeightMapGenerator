@@ -18,7 +18,7 @@ public class SimplexHeightMapGenerator extends AbstractHeightMapGenerator {
 	// Low persistance (towards 0) gives slowly varying flat terrain.
 	private double persistance;
 	
-	protected boolean useHSBScale;
+	private boolean useHSBScale;
 	
 	public SimplexHeightMapGenerator(int mapSize, int seed) {
 		super(mapSize, seed);

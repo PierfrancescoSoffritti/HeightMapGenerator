@@ -14,7 +14,7 @@ public class PerlinHeightMapGenerator extends AbstractHeightMapGenerator {
 
 	private float perlinNoiseFrequency;
 	
-	protected boolean useHSBScale;
+	private boolean useHSBScale;
 	
 	public PerlinHeightMapGenerator(int mapSize, int seed) {
 		super(mapSize, seed);
