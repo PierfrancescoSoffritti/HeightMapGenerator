@@ -22,7 +22,7 @@ public abstract class AbstractHeightMapGenerator {
 	
 	protected boolean useGrayScale;
 	protected boolean printInfo;
-	protected boolean useHSBScale;
+
 	
 	protected float min, max;
 	
@@ -37,7 +37,7 @@ public abstract class AbstractHeightMapGenerator {
 		this.erodeSmoothness = 0;
 		
 		useGrayScale = true;
-		useHSBScale=false;
+		
 		printInfo = false;
 	}
 	
@@ -148,11 +148,4 @@ public abstract class AbstractHeightMapGenerator {
 		this.erodeSmoothness = erodeSmoothness;
 	}
 
-	public boolean isUseHSBScale() {
-		return useHSBScale;
-	}
-
-	public void setUseHSBScale(boolean useHSBScale) {
-		this.useHSBScale = useHSBScale;
-	}
 }

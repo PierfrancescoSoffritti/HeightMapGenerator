@@ -18,11 +18,14 @@ public class SimplexHeightMapGenerator extends AbstractHeightMapGenerator {
 	// Low persistance (towards 0) gives slowly varying flat terrain.
 	private double persistance;
 	
+	protected boolean useHSBScale;
+	
 	public SimplexHeightMapGenerator(int mapSize, int seed) {
 		super(mapSize, seed);
 		
 		this.largestFeature = 0;
 		this.persistance = 0;
+		useHSBScale=false;
 	}
 	
 	public SimplexHeightMapGenerator(int mapSize, int seed, int largestFeature,
@@ -188,5 +191,13 @@ public class SimplexHeightMapGenerator extends AbstractHeightMapGenerator {
 	
 	public void setPersistance(double persistance) {
 		this.persistance = persistance;
+	}
+	
+	public boolean isUseHSBScale() {
+		return useHSBScale;
+	}
+
+	public void setUseHSBScale(boolean useHSBScale) {
+		this.useHSBScale = useHSBScale;
 	}
 }

@@ -13,11 +13,14 @@ import java.util.Random;
 public class PerlinHeightMapGenerator extends AbstractHeightMapGenerator {
 
 	private float perlinNoiseFrequency;
-
+	
+	protected boolean useHSBScale;
+	
 	public PerlinHeightMapGenerator(int mapSize, int seed) {
 		super(mapSize, seed);
 		
 		this.perlinNoiseFrequency = 0;
+		useHSBScale=false;
 	}
 	
 	public PerlinHeightMapGenerator(int mapSize, int seed, float perlinNoiseFrequency,
@@ -175,5 +178,13 @@ public class PerlinHeightMapGenerator extends AbstractHeightMapGenerator {
 
 	public void setPerlinNoiseFrequency(float perlinNoiseFrequency) {
 		this.perlinNoiseFrequency = perlinNoiseFrequency;
+	}
+	
+	public boolean isUseHSBScale() {
+		return useHSBScale;
+	}
+
+	public void setUseHSBScale(boolean useHSBScale) {
+		this.useHSBScale = useHSBScale;
 	}
 }
