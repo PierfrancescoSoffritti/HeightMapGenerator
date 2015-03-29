@@ -1,5 +1,6 @@
 package heightMap;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
@@ -12,11 +13,14 @@ import java.util.Random;
 public class PerlinHeightMapGenerator extends AbstractHeightMapGenerator {
 
 	private float perlinNoiseFrequency;
-
+	
+	private boolean useHSBScale;
+	
 	public PerlinHeightMapGenerator(int mapSize, int seed) {
 		super(mapSize, seed);
 		
 		this.perlinNoiseFrequency = 0;
+		useHSBScale=false;
 	}
 	
 	public PerlinHeightMapGenerator(int mapSize, int seed, float perlinNoiseFrequency,
@@ -109,7 +113,12 @@ public class PerlinHeightMapGenerator extends AbstractHeightMapGenerator {
 			g = value;// green component 0...255
 			b = value;// blue component 0...255
 		}
-		else {
+		else if(useHSBScale)  //optional
+		{
+			return this.getColorHSB(f);
+		}
+		else	//original color version
+		{
 			if(value >= 0 && value <= 42) {
 				r = 0; g = 0; b = (value*255)/42;
 			}
@@ -145,6 +154,23 @@ public class PerlinHeightMapGenerator extends AbstractHeightMapGenerator {
 		
 		return color;
 	}
+	
+	//Paolo Sarti uses the HSB color model to obtain a smooth color transition
+	private int getColorHSB(float f)
+	{
+		float saturation=0.8f;
+		float brightness=0.6f;
+		//change the [-1,1] f to [0,1] hue
+		//I have to use a linear map hue=m*f+q
+		float minF=-1;
+		float maxF=1;
+		float m=1/(maxF-minF);
+		float q=-m*minF;
+		float hue=m*f+q;
+		
+		return Color.HSBtoRGB(hue, saturation, brightness);
+	}
+	
 
 	public float getPerlinNoiseFrequency() {
 		return perlinNoiseFrequency;
@@ -152,5 +178,13 @@ public class PerlinHeightMapGenerator extends AbstractHeightMapGenerator {
 
 	public void setPerlinNoiseFrequency(float perlinNoiseFrequency) {
 		this.perlinNoiseFrequency = perlinNoiseFrequency;
+	}
+	
+	public boolean isUseHSBScale() {
+		return useHSBScale;
+	}
+
+	public void setUseHSBScale(boolean useHSBScale) {
+		this.useHSBScale = useHSBScale;
 	}
 }
