@@ -13,7 +13,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import GUI.listeners.PerlinWindowActionListener;
-import heightMap.AbstractHeightMapGenerator;
 import heightMap.PerlinHeightMapGenerator;
 
 /**
@@ -32,7 +31,7 @@ public class PerlinGUI implements GUI {
 	public static final String ERODE_ITER_TEXT_FIELD_ID = "ERODE_ITER_TEXT_FIELD_ID";
 	public static final String ERODE_SMOOTH_TEXT_FIELD_ID = "ERODE_SMOOTH_TEXT_FIELD_ID";
 	public static final String USE_GRAY_SCALE_CB_ID = "USE_GRAY_SCALE_CB_ID";
-	
+	public static final String USE_HSB_COLOR_SCALE = "USE_HSB_COLOR_SCALE";
 	public final static String RANDOM_GENERATION_BUTTON_ID = "RANDOM_GENERATION_BUTTON_ID";
 
 	private final PerlinHeightMapGenerator perlinHeightMapGenerator;	
@@ -50,9 +49,12 @@ public class PerlinGUI implements GUI {
 	private JTextField erodeSmoothnessTextField;
 	private JLabel minMaxValueLabel;
 	
-	public PerlinGUI(GUIManager guiManager, AbstractHeightMapGenerator ahmg) {
+	
+	//The Perlin GUI should be created with at least a PerlinHeightMapGenerator
+	//No need to explicit downcast this way
+	public PerlinGUI(GUIManager guiManager, PerlinHeightMapGenerator perlinHeightMapGenerator) {
 		
-		this.perlinHeightMapGenerator = (PerlinHeightMapGenerator) ahmg;		
+		this.perlinHeightMapGenerator =  perlinHeightMapGenerator;		
 		this.perlinWindowActionListener = new PerlinWindowActionListener(this);
 		this.guiManager = guiManager;
 	}
@@ -137,13 +139,20 @@ public class PerlinGUI implements GUI {
         useGrayScaleCheckBox.setName(USE_GRAY_SCALE_CB_ID);
         useGrayScaleCheckBox.addActionListener(perlinWindowActionListener);
         
-        minMaxValueLabel = new JLabel("Info:  " +perlinHeightMapGenerator.getMapInfo());
-        controlsPanel.add(minMaxValueLabel);
+        JCheckBox useHSBScaleCheckBox = new JCheckBox("Use HSB color scale");
+        useHSBScaleCheckBox.setSelected(false);
+        useHSBScaleCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
+        controlsPanel.add(useHSBScaleCheckBox);
+        useHSBScaleCheckBox.setName(USE_HSB_COLOR_SCALE);
+        useHSBScaleCheckBox.addActionListener(perlinWindowActionListener);
         
         JButton randomGenerationButton = new JButton("Random Generation");
         controlsPanel.add(randomGenerationButton);
         randomGenerationButton.setName(RANDOM_GENERATION_BUTTON_ID);
         randomGenerationButton.addActionListener(perlinWindowActionListener);
+        
+        minMaxValueLabel = new JLabel("Info:  " +perlinHeightMapGenerator.getMapInfo());
+        controlsPanel.add(minMaxValueLabel);
         
         containerPanel.add(controlsPanel, BorderLayout.PAGE_END);
         
@@ -156,7 +165,7 @@ public class PerlinGUI implements GUI {
 	}
 
 	@Override
-	public AbstractHeightMapGenerator getHeightMapGenerator() {
+	public PerlinHeightMapGenerator getHeightMapGenerator() {
 		return this.perlinHeightMapGenerator;
 	}
 

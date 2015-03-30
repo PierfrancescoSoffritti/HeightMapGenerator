@@ -38,6 +38,18 @@ public class SimplexWindowActionListener implements ActionListener {
 			simplexGUI.update();
 		}
 		
+		if(id.equals(SimplexGUI.USE_HSB_COLOR_SCALE))
+		{
+			SimplexHeightMapGenerator simplexGen=simplexGUI.getHeightMapGenerator();
+			if(simplexGen.isUseHSBScale() == true)
+				simplexGen.setUseHSBScale(false);
+			else
+				simplexGen.setUseHSBScale(true);
+			
+			simplexGUI.getHeightMapGenerator().generateHeightMap();
+			simplexGUI.update();
+		}
+		
 		if(id.equals(SimplexGUI.SIZE_TEXT_FIELD_ID)) {
 			
 			int mapSize = 0;			

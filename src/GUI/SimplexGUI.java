@@ -1,6 +1,5 @@
 package GUI;
 
-import heightMap.AbstractHeightMapGenerator;
 import heightMap.SimplexHeightMapGenerator;
 
 import java.awt.BorderLayout;
@@ -34,6 +33,7 @@ public class SimplexGUI implements GUI {
 	public static final String ERODE_ITER_TEXT_FIELD_ID = "ERODE_ITER_TEXT_FIELD_ID";
 	public static final String ERODE_SMOOTH_TEXT_FIELD_ID = "ERODE_SMOOTH_TEXT_FIELD_ID";
 	public static final String USE_GRAY_SCALE_CB_ID = "USE_GRAY_SCALE_CB_ID";
+	public static final String USE_HSB_COLOR_SCALE = "USE_HSB_COLOR_SCALE";
 	
 	public final static String RANDOM_GENERATION_BUTTON_ID = "RANDOM_GENERATION_BUTTON_ID";
 
@@ -53,9 +53,12 @@ public class SimplexGUI implements GUI {
 	private JTextField erodeSmoothnessTextField;
 	private JLabel minMaxValueLabel;
 	
-	public SimplexGUI(GUIManager guiManager, AbstractHeightMapGenerator ahmg) {
+	
+	//The Simplex GUI should be created with at least a SimplexHeightMapGenerator
+	//No need to explicit downcast this way
+	public SimplexGUI(GUIManager guiManager, SimplexHeightMapGenerator simplexHeightMapGenerator) {
 		
-		this.simplexHeightMapGenerator = (SimplexHeightMapGenerator) ahmg;		
+		this.simplexHeightMapGenerator = simplexHeightMapGenerator;		
 		this.simplexWindowActionListener = new SimplexWindowActionListener(this);
 		this.guiManager = guiManager;
 	}
@@ -148,13 +151,20 @@ public class SimplexGUI implements GUI {
         useGrayScaleCheckBox.setName(USE_GRAY_SCALE_CB_ID);
         useGrayScaleCheckBox.addActionListener(simplexWindowActionListener);
         
-        minMaxValueLabel = new JLabel("Info:  " +simplexHeightMapGenerator.getMapInfo());
-        controlsPanel.add(minMaxValueLabel);
+        JCheckBox useHSBScaleCheckBox = new JCheckBox("Use HSB color scale");
+        useHSBScaleCheckBox.setSelected(false);
+        useHSBScaleCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
+        controlsPanel.add(useHSBScaleCheckBox);
+        useHSBScaleCheckBox.setName(USE_HSB_COLOR_SCALE);
+        useHSBScaleCheckBox.addActionListener(simplexWindowActionListener);
         
         JButton randomGenerationButton = new JButton("Random Generation");
         controlsPanel.add(randomGenerationButton);
         randomGenerationButton.setName(RANDOM_GENERATION_BUTTON_ID);
         randomGenerationButton.addActionListener(simplexWindowActionListener);
+        
+        minMaxValueLabel = new JLabel("Info:  " +simplexHeightMapGenerator.getMapInfo());
+        controlsPanel.add(minMaxValueLabel);
         
         containerPanel.add(controlsPanel, BorderLayout.PAGE_END);
         
@@ -167,7 +177,7 @@ public class SimplexGUI implements GUI {
 	}
 
 	@Override
-	public AbstractHeightMapGenerator getHeightMapGenerator() {
+	public SimplexHeightMapGenerator getHeightMapGenerator() {
 		return this.simplexHeightMapGenerator;
 	}
 
