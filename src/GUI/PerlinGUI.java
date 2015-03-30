@@ -13,7 +13,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import GUI.listeners.PerlinWindowActionListener;
-import heightMap.AbstractHeightMapGenerator;
 import heightMap.PerlinHeightMapGenerator;
 
 /**
@@ -50,9 +49,12 @@ public class PerlinGUI implements GUI {
 	private JTextField erodeSmoothnessTextField;
 	private JLabel minMaxValueLabel;
 	
-	public PerlinGUI(GUIManager guiManager, AbstractHeightMapGenerator ahmg) {
+	
+	//The Perlin GUI should be created with at least a PerlinHeightMapGenerator
+	//No need to explicit downcast this way
+	public PerlinGUI(GUIManager guiManager, PerlinHeightMapGenerator perlinHeightMapGenerator) {
 		
-		this.perlinHeightMapGenerator = (PerlinHeightMapGenerator) ahmg;		
+		this.perlinHeightMapGenerator =  perlinHeightMapGenerator;		
 		this.perlinWindowActionListener = new PerlinWindowActionListener(this);
 		this.guiManager = guiManager;
 	}
@@ -163,7 +165,7 @@ public class PerlinGUI implements GUI {
 	}
 
 	@Override
-	public AbstractHeightMapGenerator getHeightMapGenerator() {
+	public PerlinHeightMapGenerator getHeightMapGenerator() {
 		return this.perlinHeightMapGenerator;
 	}
 

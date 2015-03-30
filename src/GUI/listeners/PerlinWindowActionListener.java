@@ -40,9 +40,7 @@ public class PerlinWindowActionListener implements ActionListener {
 		
 		if(id.equals(PerlinGUI.USE_HSB_COLOR_SCALE))
 		{
-			//I have to downcast it (by the way, why does the PerlinGUI.getHeightMapGenerator() return
-			//an abstract class, and not the Perlin one?
-			PerlinHeightMapGenerator perlinGen= (PerlinHeightMapGenerator) perlinGUI.getHeightMapGenerator();
+			PerlinHeightMapGenerator perlinGen=perlinGUI.getHeightMapGenerator();
 			if(perlinGen.isUseHSBScale() == true)
 				perlinGen.setUseHSBScale(false);
 			else

@@ -40,9 +40,7 @@ public class SimplexWindowActionListener implements ActionListener {
 		
 		if(id.equals(SimplexGUI.USE_HSB_COLOR_SCALE))
 		{
-			//I have to downcast it (by the way, why does the SimplexGUI.getHeightMapGenerator() return
-			//an abstract class, and not the Simplex one?
-			SimplexHeightMapGenerator simplexGen= (SimplexHeightMapGenerator) simplexGUI.getHeightMapGenerator();
+			SimplexHeightMapGenerator simplexGen=simplexGUI.getHeightMapGenerator();
 			if(simplexGen.isUseHSBScale() == true)
 				simplexGen.setUseHSBScale(false);
 			else

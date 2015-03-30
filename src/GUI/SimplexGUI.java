@@ -1,6 +1,5 @@
 package GUI;
 
-import heightMap.AbstractHeightMapGenerator;
 import heightMap.SimplexHeightMapGenerator;
 
 import java.awt.BorderLayout;
@@ -54,9 +53,12 @@ public class SimplexGUI implements GUI {
 	private JTextField erodeSmoothnessTextField;
 	private JLabel minMaxValueLabel;
 	
-	public SimplexGUI(GUIManager guiManager, AbstractHeightMapGenerator ahmg) {
+	
+	//The Simplex GUI should be created with at least a SimplexHeightMapGenerator
+	//No need to explicit downcast this way
+	public SimplexGUI(GUIManager guiManager, SimplexHeightMapGenerator simplexHeightMapGenerator) {
 		
-		this.simplexHeightMapGenerator = (SimplexHeightMapGenerator) ahmg;		
+		this.simplexHeightMapGenerator = simplexHeightMapGenerator;		
 		this.simplexWindowActionListener = new SimplexWindowActionListener(this);
 		this.guiManager = guiManager;
 	}
@@ -175,7 +177,7 @@ public class SimplexGUI implements GUI {
 	}
 
 	@Override
-	public AbstractHeightMapGenerator getHeightMapGenerator() {
+	public SimplexHeightMapGenerator getHeightMapGenerator() {
 		return this.simplexHeightMapGenerator;
 	}
 
