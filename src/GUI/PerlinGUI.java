@@ -205,6 +205,7 @@ public class PerlinGUI implements GUI {
     	if(perlinHeightMapGenerator.getUseGrayScale()) {
     		useHSBScaleCheckBox.setEnabled(false);
     		useHSBScaleCheckBox.setSelected(false);
+    		perlinHeightMapGenerator.setUseHSBScale(false);
     	}
     	else
     		useHSBScaleCheckBox.setEnabled(true);
