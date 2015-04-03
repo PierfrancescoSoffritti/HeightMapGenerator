@@ -34,7 +34,7 @@ public class SimplexWindowActionListener implements ActionListener {
 			else
 				simplexGUI.getHeightMapGenerator().setUseGrayScale(true);
 			
-			simplexGUI.getHeightMapGenerator().generateHeightMap();
+			simplexGUI.getHeightMapGenerator().generateBufferedImage();
 			simplexGUI.update();
 		}
 		
@@ -46,7 +46,7 @@ public class SimplexWindowActionListener implements ActionListener {
 			else
 				simplexGen.setUseHSBScale(true);
 			
-			simplexGUI.getHeightMapGenerator().generateHeightMap();
+			simplexGUI.getHeightMapGenerator().generateBufferedImage();
 			simplexGUI.update();
 		}
 		

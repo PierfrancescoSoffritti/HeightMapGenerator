@@ -34,7 +34,7 @@ public class PerlinWindowActionListener implements ActionListener {
 			else
 				perlinGUI.getHeightMapGenerator().setUseGrayScale(true);
 			
-			perlinGUI.getHeightMapGenerator().generateHeightMap();
+			perlinGUI.getHeightMapGenerator().generateBufferedImage();
 			perlinGUI.update();
 		}
 		
@@ -46,7 +46,7 @@ public class PerlinWindowActionListener implements ActionListener {
 			else
 				perlinGen.setUseHSBScale(true);
 			
-			perlinGUI.getHeightMapGenerator().generateHeightMap();
+			perlinGUI.getHeightMapGenerator().generateBufferedImage();
 			perlinGUI.update();
 		}
 		
@@ -145,6 +145,14 @@ public class PerlinWindowActionListener implements ActionListener {
 		}
 		if(id.equals(PerlinGUI.RANDOM_GENERATION_BUTTON_ID)) {
 			perlinGUI.getHeightMapGenerator().generateRandomHeightMap();
+			perlinGUI.update();
+		}
+		if(id.equals(PerlinGUI.START_ANIMATION_BUTTON_ID)) {
+			perlinGUI.startAnimation();
+		}
+		if(id.equals(PerlinGUI.STOP_ANIMATION_BUTTON_ID)) {
+			perlinGUI.stopAnimation();
+			perlinGUI.getHeightMapGenerator().generateHeightMap();
 			perlinGUI.update();
 		}
 	}

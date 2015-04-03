@@ -35,6 +35,14 @@ public class HeightMap {
 		}
 	}
 	
+	public void addPerlinNoise(float f, int xOffset, int yOffset) {
+		for (int i = yOffset; i < size; i++) {
+			for (int j = xOffset; j < size; j++) {
+				heights[i][j] += perlin.noise(f * i / (float)size, f * j / (float)size, 0);
+			}
+		}
+	}
+	
 	// this function uses a different Perlin noise generator. It is heavier and the results are not so good.
 	// i've introduced it only for testing purpose.
 	// note that at the moment it initializes a new heightMap each time it is called, unlike the 'addPerlinNoise' function.
@@ -143,6 +151,16 @@ public class HeightMap {
 				heights[i][j] = total / 9.0f;
 			}
 		}
+	}
+	
+	public void translatePerlin(float f, int xOffset, int yOffset) {
+		for(int i=0; i<size-yOffset; i++) {
+			for(int j=0; j<size-xOffset; j++) {
+				heights[i][j] = heights[i+yOffset][j+xOffset];
+			}
+		}
+		
+		addPerlinNoise(f, xOffset, yOffset);
 	}
 	
 	public void setHeights(float[][] heights) {

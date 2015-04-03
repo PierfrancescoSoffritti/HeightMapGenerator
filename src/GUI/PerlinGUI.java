@@ -32,6 +32,8 @@ public class PerlinGUI implements GUI {
 	public static final String ERODE_SMOOTH_TEXT_FIELD_ID = "ERODE_SMOOTH_TEXT_FIELD_ID";
 	public static final String USE_GRAY_SCALE_CB_ID = "USE_GRAY_SCALE_CB_ID";
 	public static final String USE_HSB_COLOR_SCALE = "USE_HSB_COLOR_SCALE";
+	public final static String START_ANIMATION_BUTTON_ID = "START_ANIMATION_BUTTON_ID";
+	public final static String STOP_ANIMATION_BUTTON_ID = "STOP_ANIMATION_BUTTON_ID";
 	public final static String RANDOM_GENERATION_BUTTON_ID = "RANDOM_GENERATION_BUTTON_ID";
 
 	private final PerlinHeightMapGenerator perlinHeightMapGenerator;	
@@ -48,6 +50,8 @@ public class PerlinGUI implements GUI {
 	private JTextField erodeIterationTextField;
 	private JTextField erodeSmoothnessTextField;
 	private JLabel minMaxValueLabel;
+	
+	private JCheckBox useHSBScaleCheckBox;
 	
 	
 	//The Perlin GUI should be created with at least a PerlinHeightMapGenerator
@@ -139,12 +143,23 @@ public class PerlinGUI implements GUI {
         useGrayScaleCheckBox.setName(USE_GRAY_SCALE_CB_ID);
         useGrayScaleCheckBox.addActionListener(perlinWindowActionListener);
         
-        JCheckBox useHSBScaleCheckBox = new JCheckBox("Use HSB color scale");
+        useHSBScaleCheckBox = new JCheckBox("Use HSB color scale");
         useHSBScaleCheckBox.setSelected(false);
         useHSBScaleCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
         controlsPanel.add(useHSBScaleCheckBox);
         useHSBScaleCheckBox.setName(USE_HSB_COLOR_SCALE);
         useHSBScaleCheckBox.addActionListener(perlinWindowActionListener);
+        useHSBScaleCheckBox.setEnabled(false);
+        
+        JButton startAnimation = new JButton("Start animation");
+        controlsPanel.add(startAnimation);
+        startAnimation.setName(START_ANIMATION_BUTTON_ID);
+        startAnimation.addActionListener(perlinWindowActionListener);
+        
+        JButton stopAnimation = new JButton("Stop animation");
+        controlsPanel.add(stopAnimation);
+        stopAnimation.setName(STOP_ANIMATION_BUTTON_ID);
+        stopAnimation.addActionListener(perlinWindowActionListener);
         
         JButton randomGenerationButton = new JButton("Random Generation");
         controlsPanel.add(randomGenerationButton);
@@ -186,6 +201,14 @@ public class PerlinGUI implements GUI {
     	erodeIterationTextField.setText(perlinHeightMapGenerator.getErodeIterations()+"");
     	erodeSmoothnessTextField.setText(perlinHeightMapGenerator.getErodeSmoothness()+"");
     	minMaxValueLabel.setText("Info:  " +perlinHeightMapGenerator.getMapInfo());
+    	
+    	if(perlinHeightMapGenerator.getUseGrayScale()) {
+    		useHSBScaleCheckBox.setEnabled(false);
+    		useHSBScaleCheckBox.setSelected(false);
+    	}
+    	else
+    		useHSBScaleCheckBox.setEnabled(true);
+    		
         
         guiManager.updateFromChild();
 	}
@@ -193,5 +216,35 @@ public class PerlinGUI implements GUI {
 	@Override
 	public String toString() {
 		return "Perlin Noise";
+	}
+
+	private boolean run;
+	
+	public void startAnimation() {
+		run = true;
+		Thread animationThread = new Thread() {
+			@Override
+			public void run() {
+				
+				//int x = perlinHeightMapGenerator.getMapSize();
+				while(run) {
+					
+					perlinHeightMapGenerator.translate(0, 1);
+					update();
+					
+					try {
+						sleep(1/60);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+		
+		animationThread.start();
+	}
+
+	public void stopAnimation() {
+		run = false;
 	}
 }

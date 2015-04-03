@@ -131,8 +131,7 @@ public class PerlinHeightMapGenerator extends AbstractHeightMapGenerator {
 	 *  uses the HSB color model to obtain a smooth color transition
 	 *  @author Paolo Sarti
 	 */
-	private int getColorHSB(float f)
-	{
+	private int getColorHSB(float f) {
 		float saturation=0.8f;
 		float brightness=0.6f;
 		//change the [-1,1] f to [0,1] hue
@@ -144,6 +143,11 @@ public class PerlinHeightMapGenerator extends AbstractHeightMapGenerator {
 		float hue=m*f+q;
 		
 		return Color.HSBtoRGB(hue, saturation, brightness);
+	}
+	
+	public void translate(int xOffset, int yOffset) {
+		cachedHeightMap.translatePerlin(perlinNoiseFrequency, xOffset, yOffset);
+		isValid = false;
 	}
 	
 
