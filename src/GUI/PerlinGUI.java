@@ -67,7 +67,7 @@ public class PerlinGUI implements GUI {
         
         imageContainer = new JPanel();
         imageContainer.setLayout(new BorderLayout());
-        ImageIcon imageIcon = new ImageIcon(perlinHeightMapGenerator.generateHeightMap());
+        ImageIcon imageIcon = new ImageIcon(perlinHeightMapGenerator.generateHeightMapAndBufferedImage());
         JLabel imageLabel = new JLabel();
         imageLabel.setIcon(imageIcon);
         imageContainer.add(imageLabel, BorderLayout.CENTER);

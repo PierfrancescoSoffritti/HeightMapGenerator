@@ -12,6 +12,8 @@ public abstract class AbstractHeightMapGenerator {
 	protected BufferedImage cachedHeightMapImage;
 	protected HeightMap cachedHeightMap;
 	
+	protected boolean isValid;
+	
 	protected int mapSize;
 	protected int seed;
 	
@@ -36,14 +38,42 @@ public abstract class AbstractHeightMapGenerator {
 		this.erodeIterations = 0;
 		this.erodeSmoothness = 0;
 		
-		useGrayScale = true;
+		isValid = false;
 		
+		useGrayScale = true;		
 		printInfo = false;
 	}
 	
-	public abstract BufferedImage generateHeightMap();	
-	public abstract BufferedImage generateRandomHeightMap();	
-	public abstract BufferedImage generateSampleHeightMap();
+	public abstract HeightMap generateHeightMap();	
+	public abstract HeightMap generateRandomHeightMap();	
+	public abstract HeightMap generateSampleHeightMap();
+	
+	public BufferedImage generateHeightMapAndBufferedImage() {
+		generateHeightMap();
+		return generateBufferedImage();
+	}
+	
+	public BufferedImage generateBufferedImage() {
+		
+		// TODO handle exceptions 
+			
+		int imageType = (useGrayScale == true ? BufferedImage.TYPE_BYTE_GRAY : BufferedImage.TYPE_INT_RGB);
+		
+		cachedHeightMapImage = new BufferedImage(
+				cachedHeightMap.getSize(),
+				cachedHeightMap.getSize(),
+				imageType );
+		
+		for(int i=0; i<cachedHeightMap.getSize(); i++) {
+			for(int j=0; j<cachedHeightMap.getSize(); j++) {
+				cachedHeightMapImage.setRGB(i, j, getColor(cachedHeightMap.getHeights()[i][j]));
+			}
+		}
+		
+		isValid = true;
+		
+		return cachedHeightMapImage;
+	}
 	
 	protected abstract int getColor(float f);
 	
@@ -70,7 +100,22 @@ public abstract class AbstractHeightMapGenerator {
 	}
 	
 	public BufferedImage getCachedHeightMapImage() {
-		return this.cachedHeightMapImage;
+		if(isValid)
+			return this.cachedHeightMapImage;
+		else
+			return this.generateBufferedImage();
+	}
+	
+	public void invalidate() {
+		isValid = false;
+	}
+	
+	public void validate() {
+		this.generateBufferedImage();
+	}
+	
+	public boolean isValid() {
+		return isValid;
 	}
 	
 	public boolean getUseGrayScale() {

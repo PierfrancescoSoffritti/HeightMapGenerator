@@ -71,7 +71,7 @@ public class SimplexGUI implements GUI {
         
         imageContainer = new JPanel();
         imageContainer.setLayout(new BorderLayout());
-        ImageIcon imageIcon = new ImageIcon(simplexHeightMapGenerator.generateHeightMap());
+        ImageIcon imageIcon = new ImageIcon(simplexHeightMapGenerator.generateHeightMapAndBufferedImage());
         JLabel imageLabel = new JLabel();
         imageLabel.setIcon(imageIcon);
         imageContainer.add(imageLabel, BorderLayout.CENTER);

@@ -1,7 +1,6 @@
 package heightMap;
 
 import java.awt.Color;
-import java.awt.image.BufferedImage;
 import java.util.Random;
 
 /**
@@ -44,7 +43,7 @@ public class SimplexHeightMapGenerator extends AbstractHeightMapGenerator {
 	}
 	
 	@Override
-	public BufferedImage generateHeightMap() {
+	public HeightMap generateHeightMap() {
 		
 		cachedHeightMap = new HeightMap(mapSize, seed);
 		cachedHeightMap.addSimplexNoise(largestFeature, persistance);
@@ -53,29 +52,18 @@ public class SimplexHeightMapGenerator extends AbstractHeightMapGenerator {
 			cachedHeightMap.erode(erodeSmoothness);
 		cachedHeightMap.smoothen();
 		
-		int imageType = (useGrayScale == true ? BufferedImage.TYPE_BYTE_GRAY : BufferedImage.TYPE_INT_RGB);
-		
-		cachedHeightMapImage = new BufferedImage(
-				cachedHeightMap.getSize(),
-				cachedHeightMap.getSize(),
-				imageType );
-				
-		setMapInfo(cachedHeightMap);
-		
-		for(int i=0; i<cachedHeightMap.getSize(); i++) {
-			for(int j=0; j<cachedHeightMap.getSize(); j++) {
-				cachedHeightMapImage.setRGB(i, j, getColor(cachedHeightMap.getHeights()[i][j]));
-			}
-		}
-		
+		// TODO move to superclass
+		setMapInfo(cachedHeightMap);		
 		if(printInfo)
-			System.out.println(getMapInfo());
+			System.out.println(getMapInfo());		
+		isValid = false;
+		// ---- 
 		
-		return cachedHeightMapImage;
+		return cachedHeightMap;
 	}
 	
 	@Override
-	public BufferedImage generateRandomHeightMap() {
+	public HeightMap generateRandomHeightMap() {
 		
 		Random r = new Random();
 		this.largestFeature = r.nextInt(1000000);
@@ -89,7 +77,7 @@ public class SimplexHeightMapGenerator extends AbstractHeightMapGenerator {
 	}
 	
 	@Override
-	public BufferedImage generateSampleHeightMap() {
+	public HeightMap generateSampleHeightMap() {
 		
 		this.largestFeature = 100; 
 		this.persistance = 0.9;
@@ -104,9 +92,6 @@ public class SimplexHeightMapGenerator extends AbstractHeightMapGenerator {
 	@Override
 	protected int getColor(float f) {
 		
-		// ?? naive solution
-		//int value = (int) ((f+0.5) * 255);
-		
 		// i'm adding an offset of |min|. My values will go from 0 to max+|min|
 		// in this way i can easily  distribute them on the interval [0, 255]
 		int value = (int) ( ((f+Math.abs(min)) * 255)/(max+Math.abs(min)) );
@@ -118,9 +103,8 @@ public class SimplexHeightMapGenerator extends AbstractHeightMapGenerator {
 			g = value;// green component 0...255
 			b = value;// blue component 0...255
 		}
-		else if(useHSBScale)
-		{
-			return this.getColorHSB(f);
+		else if(useHSBScale) {
+			return getColorHSB(f);
 		}
 		else {
 			if(value >= 0 && value <= 42) {
@@ -141,25 +125,16 @@ public class SimplexHeightMapGenerator extends AbstractHeightMapGenerator {
 			if(value >= 246 && value <= 255){
 				r = 255; g = 0; b = (value*255)/255;
 			}
-			
-			/*
-			if(value >= 0 && value <= 85) {
-				b = (value*255)/85 ; g = 0; r = 0;
-			}
-			else if(value >= 86 && value <= 170) {
-				b = 0; g = (value*255)/170; r = 0;
-			}
-			else {
-				b = 0; g = 0; r = value;
-			}
-			*/
 		}
 		int color = (r << 16) | (g << 8) | b;
 		
 		return color;
 	}
 	
-	//Paolo Sarti uses the HSB color model to obtain a smooth color transition
+	/**
+	 *  uses the HSB color model to obtain a smooth color transition
+	 *  @author Paolo Sarti
+	 */
 	private int getColorHSB(float f)
 	{
 		float saturation=0.8f;

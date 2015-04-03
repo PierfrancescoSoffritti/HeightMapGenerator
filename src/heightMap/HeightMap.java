@@ -35,9 +35,9 @@ public class HeightMap {
 		}
 	}
 	
-	// this function uses a different Perlin noise generator. It is more heavy and the results are not so good.
+	// this function uses a different Perlin noise generator. It is heavier and the results are not so good.
 	// i've introduced it only for testing purpose.
-	// note that at the moment it is initializating a new heightMap each time it is called, unlike the 'addPerlinNoise' function.
+	// note that at the moment it initializes a new heightMap each time it is called, unlike the 'addPerlinNoise' function.
 	public void initPerlinNoise2(int octaveCount, float noisePersistance) {
 		PerlinNoiseGenerator2 perlin2 = new PerlinNoiseGenerator2();
 		heights = perlin2.generatePerlinNoise(perlin2.generateWhiteNoise(size, size, seed), octaveCount, noisePersistance);
