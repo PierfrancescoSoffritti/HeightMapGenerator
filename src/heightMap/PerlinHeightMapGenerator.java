@@ -91,6 +91,12 @@ public class PerlinHeightMapGenerator extends AbstractHeightMapGenerator {
 		// in this way i can easily  distribute them on the interval [0, 255]
 		int value = (int) ( ((f+Math.abs(min)) * 255)/(max+Math.abs(min)) );
 		
+		// approximating errors in animation loop
+//		if(value < 0)
+//			value = 0;
+//		if(value > 255)
+//			value = 255;
+		
 		int r = 0, g = 0, b = 0;
 		
 		if(useGrayScale) {
@@ -143,13 +149,7 @@ public class PerlinHeightMapGenerator extends AbstractHeightMapGenerator {
 		float hue=m*f+q;
 		
 		return Color.HSBtoRGB(hue, saturation, brightness);
-	}
-	
-	public void translate(int xOffset, int yOffset) {
-		cachedHeightMap.translatePerlin(perlinNoiseFrequency, xOffset, yOffset);
-		isValid = false;
-	}
-	
+	}	
 
 	public float getPerlinNoiseFrequency() {
 		return perlinNoiseFrequency;

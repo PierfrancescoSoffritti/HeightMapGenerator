@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
 import GUI.PerlinGUI;
@@ -23,6 +24,7 @@ public class PerlinWindowActionListener implements ActionListener {
 		this.perlinGUI = perlinGUI;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Component c = (Component) e.getSource();
@@ -148,12 +150,19 @@ public class PerlinWindowActionListener implements ActionListener {
 			perlinGUI.update();
 		}
 		if(id.equals(PerlinGUI.START_ANIMATION_BUTTON_ID)) {
-			perlinGUI.startAnimation();
+			if(!perlinGUI.isRunning())
+				perlinGUI.startAnimation();
 		}
 		if(id.equals(PerlinGUI.STOP_ANIMATION_BUTTON_ID)) {
 			perlinGUI.stopAnimation();
 			perlinGUI.getHeightMapGenerator().generateHeightMap();
 			perlinGUI.update();
+		}
+		if(id.equals(PerlinGUI.TRANSFORMATIONS_NAMES_LIST_ID)) {
+			int selected = ((JComboBox)c).getSelectedIndex();
+			
+			if(selected != perlinGUI.getCurrentTransformation())
+				perlinGUI.setCurrentTransformation(selected);
 		}
 	}
 }

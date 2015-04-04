@@ -52,10 +52,8 @@ public class SimplexGUI implements GUI {
 	private JTextField erodeIterationTextField;
 	private JTextField erodeSmoothnessTextField;
 	private JLabel minMaxValueLabel;
+	private ImageIcon imageIcon;
 	
-	
-	//The Simplex GUI should be created with at least a SimplexHeightMapGenerator
-	//No need to explicit downcast this way
 	public SimplexGUI(GUIManager guiManager, SimplexHeightMapGenerator simplexHeightMapGenerator) {
 		
 		this.simplexHeightMapGenerator = simplexHeightMapGenerator;		
@@ -71,7 +69,7 @@ public class SimplexGUI implements GUI {
         
         imageContainer = new JPanel();
         imageContainer.setLayout(new BorderLayout());
-        ImageIcon imageIcon = new ImageIcon(simplexHeightMapGenerator.generateHeightMapAndBufferedImage());
+        imageIcon = new ImageIcon(simplexHeightMapGenerator.generateHeightMapAndBufferedImage());
         JLabel imageLabel = new JLabel();
         imageLabel.setIcon(imageIcon);
         imageContainer.add(imageLabel, BorderLayout.CENTER);
@@ -183,12 +181,8 @@ public class SimplexGUI implements GUI {
 
 	@Override
 	public void update() {
-		imageContainer.removeAll();
 		
-		ImageIcon imageIcon = new ImageIcon(simplexHeightMapGenerator.getCachedHeightMapImage());
-        JLabel imageLabel = new JLabel();
-        imageLabel.setIcon(imageIcon);
-        imageContainer.add(imageLabel, BorderLayout.CENTER);
+		imageIcon.setImage(simplexHeightMapGenerator.getCachedHeightMapImage());
         
         largestFeatureTextField.setText(simplexHeightMapGenerator.getLargestFeature()+"");
         persistanceTextField.setText(simplexHeightMapGenerator.getPersistance()+"");

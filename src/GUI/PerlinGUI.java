@@ -3,10 +3,12 @@ package GUI;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -14,6 +16,9 @@ import javax.swing.SwingConstants;
 
 import GUI.listeners.PerlinWindowActionListener;
 import heightMap.PerlinHeightMapGenerator;
+import heightMap.transformations.MysticalEffect;
+import heightMap.transformations.Transformation;
+import heightMap.transformations.Translation;
 
 /**
 * PerlinGUI.java
@@ -35,6 +40,7 @@ public class PerlinGUI implements GUI {
 	public final static String START_ANIMATION_BUTTON_ID = "START_ANIMATION_BUTTON_ID";
 	public final static String STOP_ANIMATION_BUTTON_ID = "STOP_ANIMATION_BUTTON_ID";
 	public final static String RANDOM_GENERATION_BUTTON_ID = "RANDOM_GENERATION_BUTTON_ID";
+	public final static String TRANSFORMATIONS_NAMES_LIST_ID = "TRANSFORMATIONS_NAMES_LIST_ID";
 
 	private final PerlinHeightMapGenerator perlinHeightMapGenerator;	
 	private PerlinWindowActionListener perlinWindowActionListener;
@@ -50,17 +56,24 @@ public class PerlinGUI implements GUI {
 	private JTextField erodeIterationTextField;
 	private JTextField erodeSmoothnessTextField;
 	private JLabel minMaxValueLabel;
+	private ImageIcon imageIcon;
+	private JComboBox<String> transformationList;
 	
 	private JCheckBox useHSBScaleCheckBox;
 	
+	private boolean isRunning;	
 	
-	//The Perlin GUI should be created with at least a PerlinHeightMapGenerator
-	//No need to explicit downcast this way
+	private ArrayList<Transformation> transformations;
+	private int currentTransformation;
+	
 	public PerlinGUI(GUIManager guiManager, PerlinHeightMapGenerator perlinHeightMapGenerator) {
 		
 		this.perlinHeightMapGenerator =  perlinHeightMapGenerator;		
 		this.perlinWindowActionListener = new PerlinWindowActionListener(this);
 		this.guiManager = guiManager;
+		
+		this.transformations = new ArrayList<Transformation>();
+		this.currentTransformation = 0;
 	}
 
 	@Override
@@ -71,7 +84,7 @@ public class PerlinGUI implements GUI {
         
         imageContainer = new JPanel();
         imageContainer.setLayout(new BorderLayout());
-        ImageIcon imageIcon = new ImageIcon(perlinHeightMapGenerator.generateHeightMapAndBufferedImage());
+        imageIcon = new ImageIcon(perlinHeightMapGenerator.generateHeightMapAndBufferedImage());
         JLabel imageLabel = new JLabel();
         imageLabel.setIcon(imageIcon);
         imageContainer.add(imageLabel, BorderLayout.CENTER);
@@ -150,13 +163,22 @@ public class PerlinGUI implements GUI {
         useHSBScaleCheckBox.setName(USE_HSB_COLOR_SCALE);
         useHSBScaleCheckBox.addActionListener(perlinWindowActionListener);
         useHSBScaleCheckBox.setEnabled(false);
+      	
+        JLabel transformationLabel = new JLabel("Transformation:", SwingConstants.CENTER);
+        controlsPanel.add(transformationLabel);
+        String[] transformationNames = initTransformations();
+        transformationList = new JComboBox<String>(transformationNames);
+        transformationList.setSelectedIndex(currentTransformation);
+        controlsPanel.add(transformationList);
+        transformationList.setName(TRANSFORMATIONS_NAMES_LIST_ID);
+        transformationList.addActionListener(perlinWindowActionListener);        
         
-        JButton startAnimation = new JButton("Start animation");
+        JButton startAnimation = new JButton("Start real-time rendering");
         controlsPanel.add(startAnimation);
         startAnimation.setName(START_ANIMATION_BUTTON_ID);
         startAnimation.addActionListener(perlinWindowActionListener);
         
-        JButton stopAnimation = new JButton("Stop animation");
+        JButton stopAnimation = new JButton("Stop real-time rendering");
         controlsPanel.add(stopAnimation);
         stopAnimation.setName(STOP_ANIMATION_BUTTON_ID);
         stopAnimation.addActionListener(perlinWindowActionListener);
@@ -174,6 +196,17 @@ public class PerlinGUI implements GUI {
         return containerPanel;
 	}
 
+	private String[] initTransformations() {
+		transformations.add(new Translation(perlinHeightMapGenerator));
+		transformations.add(new MysticalEffect(perlinHeightMapGenerator));
+		
+		String[] trasformationNames = new String[transformations.size()];
+        for(int i=0; i<transformations.size(); i++)
+        	trasformationNames[i] = transformations.get(i).toString();
+        
+        return trasformationNames;
+	}
+
 	@Override
 	public BufferedImage getBufferedImage() {
 		return perlinHeightMapGenerator.getCachedHeightMapImage();
@@ -186,12 +219,8 @@ public class PerlinGUI implements GUI {
 
 	@Override
 	public void update() {
-		imageContainer.removeAll();
-		
-		ImageIcon imageIcon = new ImageIcon(perlinHeightMapGenerator.getCachedHeightMapImage());
-        JLabel imageLabel = new JLabel();
-        imageLabel.setIcon(imageIcon);
-        imageContainer.add(imageLabel, BorderLayout.CENTER);
+
+		imageIcon.setImage(perlinHeightMapGenerator.getCachedHeightMapImage());
         
         seedTextField.setText(perlinHeightMapGenerator.getSeed()+"");
     	sizeTextField.setText(perlinHeightMapGenerator.getMapSize()+"");
@@ -218,19 +247,28 @@ public class PerlinGUI implements GUI {
 	public String toString() {
 		return "Perlin Noise";
 	}
-
-	private boolean run;
 	
 	public void startAnimation() {
-		run = true;
+		isRunning = true;
 		Thread animationThread = new Thread() {
 			@Override
 			public void run() {
 				
-				//int x = perlinHeightMapGenerator.getMapSize();
-				while(run) {
+				Transformation transformation = transformations.get(currentTransformation);
+				int x = 0;
+				int translateX = 1;
+				int translateY = 1;				
+				while(isRunning) {
 					
-					perlinHeightMapGenerator.translate(0, 1);
+					// TODO at the moment i'm to lazy to do it better
+					if(transformation instanceof MysticalEffect) {
+						((MysticalEffect)transformation).applyMysticalEffect();
+					}
+					if(!(transformation instanceof MysticalEffect)) {
+						x++;
+						((Translation)transformation).translate(translateX, translateY, x*translateX, x*translateY);
+					}
+					
 					update();
 					
 					try {
@@ -246,6 +284,18 @@ public class PerlinGUI implements GUI {
 	}
 
 	public void stopAnimation() {
-		run = false;
+		isRunning = false;
+	}
+	
+	public boolean isRunning() {
+		return isRunning;
+	}
+	
+	public int getCurrentTransformation () {
+		return currentTransformation;
+	}
+
+	public void setCurrentTransformation(int selected) {
+		this.currentTransformation = selected;
 	}
 }

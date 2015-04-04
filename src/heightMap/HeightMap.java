@@ -35,10 +35,32 @@ public class HeightMap {
 		}
 	}
 	
-	public void addPerlinNoise(float f, int xOffset, int yOffset) {
-		for (int i = yOffset; i < size; i++) {
-			for (int j = xOffset; j < size; j++) {
-				heights[i][j] += perlin.noise(f * i / (float)size, f * j / (float)size, 0);
+	/**
+	 * set PerlinNoise to a specific region of the map 
+	 *
+	 * @param  f  noise frequency
+	 * @param  xFrom apply noise from this X coordinate
+	 * @param  xTo apply noise until this X coordinate
+	 * @param  yFrom apply noise from this Y coordinate
+	 * @param  yTo apply noise until this Y coordinate
+	 * @param xNoiseOffset fill empty space with noise generated at this x offset
+	 * @param yNoiseOffset fill empty space with noise generated at this y offset
+	 * 
+	 */	
+	public void setPerlinNoise(float f, int xFrom, int xTo, int yFrom, int yTo,
+			int xNoiseOffset, int yNoiseOffset) {
+		for (int i = xFrom; i < xTo; i++) {
+			for (int j = yFrom; j < yTo; j++) {
+				heights[i][j] = perlin.noise(f * (i+xNoiseOffset) / (float)size, f * (j+yNoiseOffset) / (float)size, 0);
+			}
+		}
+	}
+	
+	public void addPerlinNoise(float f, int xFrom, int xTo, int yFrom, int yTo,
+			int xNoiseOffset, int yNoiseOffset) {
+		for (int i = xFrom; i < xTo; i++) {
+			for (int j = yFrom; j < yTo; j++) {
+				heights[i][j] += perlin.noise(f * (i+xNoiseOffset) / (float)size, f * (j+yNoiseOffset) / (float)size, 0);
 			}
 		}
 	}
@@ -153,16 +175,10 @@ public class HeightMap {
 		}
 	}
 	
-	public void translatePerlin(float f, int xOffset, int yOffset) {
-		for(int i=0; i<size-yOffset; i++) {
-			for(int j=0; j<size-xOffset; j++) {
-				heights[i][j] = heights[i+yOffset][j+xOffset];
-			}
-		}
-		
-		addPerlinNoise(f, xOffset, yOffset);
+	public void setHeights(int i, int j, float value) {
+		heights[i][j] = value;		
 	}
-	
+
 	public void setHeights(float[][] heights) {
 		this.heights = heights;
 	}
@@ -202,5 +218,4 @@ public class HeightMap {
 		
 		return res.toString();
 	}
-
 }
