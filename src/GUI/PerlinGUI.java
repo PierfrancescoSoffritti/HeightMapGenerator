@@ -260,10 +260,11 @@ public class PerlinGUI implements GUI {
 				int translateX = 1;
 				int translateY = 1;	
 				//60 fps
-				long fps=1000/60;
+				long fps=60;
+				long timeToSleep=1000/fps; //millis
 				long startTime=0;
 				long endTime=0;
-				long time=0;
+				long diffTime=0;
 				while(isRunning) {
 					
 					//count the milliseconds of the operation
@@ -282,13 +283,13 @@ public class PerlinGUI implements GUI {
 					
 					//count the milliseconds of the operation
 					endTime = System.currentTimeMillis();
-					time = (endTime-startTime);
+					diffTime = (endTime-startTime);
 					
 					try {
 						//sleeps the number of milliseconds that remain to have a smooth, locked 60 fps animation
-						if(time<fps)
-							sleep(fps-time);
-						//if the time needed is more, then no sleep is made
+						if(diffTime<timeToSleep)
+							sleep(timeToSleep-diffTime);
+						//if the time needed is more, then no sleep is slept
 						
 					} catch (InterruptedException e) {
 						e.printStackTrace();
