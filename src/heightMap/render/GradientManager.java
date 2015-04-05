@@ -47,18 +47,26 @@ public class GradientManager {
 	 * @throws RenderException 
 	 */
 	public int renderPoint(int point) throws RenderException {
+		
+		// naive handling
+		if(point > 255) {
+//			System.out.println(point);
+			point = 255;
+		}
+		if(point < 0) {
+//			System.out.println(point);
+			point = 0;
+		}
+		
 		for(int i=0; i<gradientPoints.size(); i++) {
 			if(gradientPoints.get(i).include(point))
 				return gradientPoints.get(i).getRGBValue(point);
 		}
 		
 		// the point has no interval. Return black
-//		int r = 0; int g = 0; int b = 0;
-//		int RGBcolor = (r << 16) | (g << 8) | b;
-//		return RGBcolor;
-		
-		return -1000;
-		
+		int r = 0; int g = 0; int b = 0;
+		int RGBcolor = (r << 16) | (g << 8) | b;
+		return RGBcolor;		
 	}
 	
 	public boolean isEmpty() {

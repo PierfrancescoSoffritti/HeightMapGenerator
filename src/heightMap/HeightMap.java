@@ -114,9 +114,6 @@ public class HeightMap {
 				int x = (int)(xStart+i+xNoiseOffset*((XEnd-xStart)/size));
 				int y = (int)(yStart+j+yNoiseOffset*((yEnd-yStart)/size));
 				heights[i][j] = (float) ( (simplexNoise.getNoise2D(x,y)) );
-				
-				if(heights[i][j] > 1 || heights[i][j] < -1)
-					System.out.println(heights[i][j]);
 			}
 		}
 	}
