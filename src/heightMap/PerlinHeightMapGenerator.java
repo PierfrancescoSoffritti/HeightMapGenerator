@@ -82,7 +82,7 @@ public class PerlinHeightMapGenerator extends AbstractHeightMapGenerator {
 		
 		return this.generateHeightMap();
 	}
-
+	
 	public float getPerlinNoiseFrequency() {
 		return perlinNoiseFrequency;
 	}
