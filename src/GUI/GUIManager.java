@@ -47,7 +47,7 @@ public class GUIManager {
 		for(int i=0; i<heightMapGenerators.size(); i++)
 			GUIList.add(GUIFactory.getGUI(this, heightMapGenerators.get(i)));
 		
-		this.currentGUI = 0;
+		this.currentGUI = 1;
 		
 		mainWindowActionListener = new MainWindowActionListener(this);
 		initMainWindow();

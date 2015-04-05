@@ -53,12 +53,13 @@ public class SimplexHeightMapGenerator extends AbstractHeightMapGenerator {
 		cachedHeightMap.smoothen();
 		
 		// TODO move to superclass
-		setMapInfo(cachedHeightMap);		
-		if(printInfo)
-			System.out.println(getMapInfo());		
+		setMapInfo(cachedHeightMap);	
 		isValid = false;
 		// ---- 
 		
+		
+		normalize();
+		setMapInfo(cachedHeightMap);		
 		return cachedHeightMap;
 	}
 	
@@ -68,10 +69,14 @@ public class SimplexHeightMapGenerator extends AbstractHeightMapGenerator {
 		Random r = new Random();
 		this.largestFeature = r.nextInt(1000000);
 		this.persistance = r.nextDouble();
-		this.perturbFrequency = r.nextFloat()*r.nextInt(200);
-		this.perturbDistance = r.nextFloat()*r.nextInt(200);
-		this.erodeIterations = r.nextInt(r.nextInt(200)+1);
-		this.erodeSmoothness = r.nextFloat()*r.nextInt();
+//		this.perturbFrequency = r.nextFloat()*r.nextInt(200);
+		this.perturbFrequency = 0;
+//		this.perturbDistance = r.nextFloat()*r.nextInt(200);
+		this.perturbDistance = 0;
+//		this.erodeIterations = r.nextInt(r.nextInt(200)+1);
+		this.erodeIterations = 0;
+//		this.erodeSmoothness = r.nextFloat()*r.nextInt();
+		this.erodeSmoothness = 0;
 		
 		return this.generateHeightMap();
 	}
@@ -94,7 +99,8 @@ public class SimplexHeightMapGenerator extends AbstractHeightMapGenerator {
 		
 		// i'm adding an offset of |min|. My values will go from 0 to max+|min|
 		// in this way i can easily  distribute them on the interval [0, 255]
-		int value = (int) ( ((f+Math.abs(min)) * 255)/(max+Math.abs(min)) );
+		// minHeight : x = maxHeight : 255
+		int value = (int) ( ((f+Math.abs(minHeight)) * 255)/(maxHeight+Math.abs(minHeight)) );
 		
 		int r = 0, g = 0, b = 0;
 		
@@ -132,11 +138,10 @@ public class SimplexHeightMapGenerator extends AbstractHeightMapGenerator {
 	}
 	
 	/**
-	 *  uses the HSB color model to obtain a smooth color transition
+	 *  use the HSB color model to obtain a smooth color transition
 	 *  @author Paolo Sarti
 	 */
-	private int getColorHSB(float f)
-	{
+	private int getColorHSB(float f) {
 		float saturation=0.8f;
 		float brightness=0.6f;
 		//change the [-1,1] f to [0,1] hue
@@ -148,9 +153,7 @@ public class SimplexHeightMapGenerator extends AbstractHeightMapGenerator {
 		float hue=m*f+q;
 		
 		return Color.HSBtoRGB(hue, saturation, brightness);
-	}
-	
-	
+	}	
 	
 	public int getLargestFeature() {
 		return this.largestFeature;

@@ -41,8 +41,8 @@ public class SimplexNoise {
     public double getNoise2D(int x, int y) {
         double result = 0;
         for(int i=0;i<octaves.length;i++) {
-          //double frequency = Math.pow(2,i);
-          //double amplitude = Math.pow(persistence,octaves.length-i);
+//          double frequency = Math.pow(2,i);
+//          double amplitude = Math.pow(persistence,octaves.length-i);
 
           result = result+octaves[i].noise(x/frequencys[i], y/frequencys[i])* amplitudes[i];
         }

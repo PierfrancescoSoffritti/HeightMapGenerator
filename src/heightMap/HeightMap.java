@@ -90,7 +90,7 @@ public class HeightMap {
 			for(int j=0; j<size; j++) {
 				int x = (int)(xStart+i*((XEnd-xStart)/size));
 				int y = (int)(yStart+j*((yEnd-yStart)/size));
-				heights[i][j] += (float) ( 0.5*(1+simplexNoise.getNoise2D(x,y)) );
+				heights[i][j] += (float) ( (simplexNoise.getNoise2D(x,y)) );
 			}
 		}
 	}
@@ -175,7 +175,7 @@ public class HeightMap {
 		}
 	}
 	
-	public void setHeights(int i, int j, float value) {
+	public void setHeight(int i, int j, float value) {
 		heights[i][j] = value;		
 	}
 

@@ -33,10 +33,8 @@ public class Main {
 		
 		PerlinHeightMapGenerator perlinHeightMapGenerator = new PerlinHeightMapGenerator(mapSize, seed, 6.0f, 320.0f,
 				32.0f, 20, 160.0f);
-		perlinHeightMapGenerator.enablePrintInfo(true);
 		
-		SimplexHeightMapGenerator simplexHeightMapGenerator = new SimplexHeightMapGenerator(mapSize, seed, 100, 0.9, 320.0f, 32.0f, 20, 160.0f);
-		simplexHeightMapGenerator.enablePrintInfo(true);
+		SimplexHeightMapGenerator simplexHeightMapGenerator = new SimplexHeightMapGenerator(mapSize, seed, 832910, 0.577922, 0f, 0f, 0, 0f);
 		
 		ArrayList<AbstractHeightMapGenerator> heightMapGenerators = new ArrayList<AbstractHeightMapGenerator>();
 		heightMapGenerators.add(perlinHeightMapGenerator);

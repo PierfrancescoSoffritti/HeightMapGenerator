@@ -63,7 +63,7 @@ public class Translation extends Transformation {
 		for(int i=0; i<size-x; i++) {
 			for(int j=0; j<size-y; j++) {
 				heightMapGenerator.getCachedHeightMap()
-					.setHeights(i, j, heightMapGenerator.getCachedHeightMap().getHeights()[i+x][j+y]);
+					.setHeight(i, j, heightMapGenerator.getCachedHeightMap().getHeights()[i+x][j+y]);
 			}
 		}
 	}
@@ -99,7 +99,7 @@ public class Translation extends Transformation {
 		for(int i=0; i<size-x; i++) {
 			for(int j=size-y; j>=0; j--) {
 				heightMapGenerator.getCachedHeightMap()
-					.setHeights(i, j, heightMapGenerator.getCachedHeightMap().getHeights()[i+x][j+y]);
+					.setHeight(i, j, heightMapGenerator.getCachedHeightMap().getHeights()[i+x][j+y]);
 			}
 		}
 	}

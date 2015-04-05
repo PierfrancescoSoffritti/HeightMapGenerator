@@ -40,9 +40,8 @@ public class PerlinHeightMapGenerator extends AbstractHeightMapGenerator {
 	public HeightMap generateHeightMap() {
 		
 		cachedHeightMap = new HeightMap(mapSize, seed);
-		//System.out.println(heightMap.toString());
 		// testing
-		//heightMap.initPerlinNoise2(7, 0.5f);
+//		cachedHeightMap.initPerlinNoise2(7, 0.5f);
 		cachedHeightMap.addPerlinNoise(perlinNoiseFrequency);
 		cachedHeightMap.perturb(perturbFrequency, perturbDistance);
 		for(int i=0; i<erodeIterations; i++)
@@ -51,10 +50,11 @@ public class PerlinHeightMapGenerator extends AbstractHeightMapGenerator {
 		
 		// TODO move to superclass
 		setMapInfo(cachedHeightMap);		
-		if(printInfo)
-			System.out.println(getMapInfo());		
 		isValid = false;
 		// ----
+		
+		normalize();
+		setMapInfo(cachedHeightMap);
 		
 		return cachedHeightMap;
 	}
@@ -89,7 +89,7 @@ public class PerlinHeightMapGenerator extends AbstractHeightMapGenerator {
 		
 		// i'm adding an offset of |min|. My values will go from 0 to max+|min|
 		// in this way i can easily  distribute them on the interval [0, 255]
-		int value = (int) ( ((f+Math.abs(min)) * 255)/(max+Math.abs(min)) );
+		int value = (int) ( ((f+Math.abs(minHeight)) * 255)/(maxHeight+Math.abs(minHeight)) );
 		
 		// approximating errors in animation loop
 //		if(value < 0)

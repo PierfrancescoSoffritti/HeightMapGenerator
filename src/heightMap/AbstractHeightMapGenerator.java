@@ -23,10 +23,8 @@ public abstract class AbstractHeightMapGenerator {
 	protected float erodeSmoothness;
 	
 	protected boolean useGrayScale;
-	protected boolean printInfo;
-
 	
-	protected float min, max;
+	protected float minHeight, maxHeight;
 	
 	protected AbstractHeightMapGenerator(int mapSize, int seed) {
 		this.mapSize = mapSize;
@@ -40,8 +38,7 @@ public abstract class AbstractHeightMapGenerator {
 		
 		isValid = false;
 		
-		useGrayScale = true;		
-		printInfo = false;
+		useGrayScale = true;
 	}
 	
 	public abstract HeightMap generateHeightMap();	
@@ -78,20 +75,47 @@ public abstract class AbstractHeightMapGenerator {
 	protected abstract int getColor(float f);
 	
 	protected void setMapInfo(HeightMap heightMap) {
-		min = 1000;
-		max = -1000;		
+		minHeight = 1000;
+		maxHeight = -1000;		
 		for(int i=0; i<heightMap.getSize(); i++) {
 			for(int j=0; j<heightMap.getSize(); j++) {
-				if(heightMap.getHeights()[i][j] < min)
-					min = heightMap.getHeights()[i][j];
-				if(heightMap.getHeights()[i][j] > max)
-					max = heightMap.getHeights()[i][j];
+				if(heightMap.getHeights()[i][j] < minHeight)
+					minHeight = heightMap.getHeights()[i][j];
+				if(heightMap.getHeights()[i][j] > maxHeight)
+					maxHeight = heightMap.getHeights()[i][j];
 			}
 		}
 	}
 	
+	/**
+	 * distributes the values on the interval between -1 and 1
+	 */
+	public void normalize() {
+		int oMax = 2;
+		
+		// offset heights, to have a range from 0 to maxH+minH
+		// distribute those values in the interval from 0 to 2
+		// then subtract 1, in order to have them between -1 and 1
+		for(int i=0; i<mapSize; i++) {
+			for(int j=0; j<mapSize; j++) {
+				cachedHeightMap.setHeight(i, j, 
+						( ((cachedHeightMap.getHeights()[i][j]+Math.abs(minHeight)) * oMax)
+								/(maxHeight+Math.abs(minHeight)) ) -1 );
+			}
+		}
+		
+		isValid = false;
+	}
+	
+	public void setMaxMinHeight(float value) {
+		if(value>maxHeight)
+			maxHeight = value;
+		if(value<minHeight)
+			minHeight = value;
+	}
+	
 	public String getMapInfo() {		
-		String res = "min: " +min +"  max: " +max;
+		String res = "min: " +minHeight +"  max: " +maxHeight;
 		return res;
 	}
 	
@@ -124,14 +148,6 @@ public abstract class AbstractHeightMapGenerator {
 	
 	public void setUseGrayScale(boolean useGrayScale) {
 		this.useGrayScale = useGrayScale;
-	}
-	
-	public boolean isPrintInfoEnabled() {
-		return printInfo;
-	}
-	
-	public void enablePrintInfo(boolean printInfo) {
-		this.printInfo = printInfo;
 	}
 
 
