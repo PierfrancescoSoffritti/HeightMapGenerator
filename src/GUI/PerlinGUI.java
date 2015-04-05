@@ -250,6 +250,7 @@ public class PerlinGUI implements GUI {
 	
 	public void startAnimation() {
 		isRunning = true;
+
 		Thread animationThread = new Thread() {
 			@Override
 			public void run() {
@@ -257,8 +258,17 @@ public class PerlinGUI implements GUI {
 				Transformation transformation = transformations.get(currentTransformation);
 				int x = 0;
 				int translateX = 1;
-				int translateY = 1;				
+				int translateY = 1;	
+				//60 fps
+				long fps=60;
+				long timeToSleep=1000/fps; //millis
+				long startTime=0;
+				long endTime=0;
+				long diffTime=0;
 				while(isRunning) {
+					
+					//count the milliseconds of the operation
+					startTime = System.currentTimeMillis();
 					
 					// TODO at the moment i'm to lazy to do it better
 					if(transformation instanceof MysticalEffect) {
@@ -271,8 +281,16 @@ public class PerlinGUI implements GUI {
 					
 					update();
 					
+					//count the milliseconds of the operation
+					endTime = System.currentTimeMillis();
+					diffTime = (endTime-startTime);
+					
 					try {
-						sleep(1/60);
+						//sleeps the number of milliseconds that remain to have a smooth, locked 60 fps animation
+						if(diffTime<timeToSleep)
+							sleep(timeToSleep-diffTime);
+						//if the time needed is more, then no sleep is slept
+						
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

@@ -150,6 +150,8 @@ public class PerlinHeightMapGenerator extends AbstractHeightMapGenerator {
 		
 		return Color.HSBtoRGB(hue, saturation, brightness);
 	}	
+	
+	
 
 	public float getPerlinNoiseFrequency() {
 		return perlinNoiseFrequency;
