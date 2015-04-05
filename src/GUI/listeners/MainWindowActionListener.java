@@ -1,5 +1,7 @@
 package GUI.listeners;
 
+import heightMap.render.RenderException;
+
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -48,19 +50,29 @@ public class MainWindowActionListener implements ActionListener {
 			    File fileToSave = fileChooser.getSelectedFile();
 			    try {
 					ImageIO.write(guiManager.getCurrentGUI().getBufferedImage(), "png", fileToSave);
-				} catch (IOException exc) {
+				} catch (IOException | RenderException exc) {
 					exc.printStackTrace();
 				}
 			}			
 		}
 		if(id.equals(GUIManager.SHOW_TOPOGRAPHY_BUTTON_ID)) {
-			guiManager.showTopography(1);
+			try {
+				guiManager.showTopography(1);
+			} catch (RenderException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		if(id.equals(GUIManager.GUI_NAMES_LIST_BUTTON_ID)) {
 			int selected = ((JComboBox)c).getSelectedIndex();
 			
 			if(selected != guiManager.getCurrentGUIIndex())
-				guiManager.setCurrentGUI(selected);
+				try {
+					guiManager.setCurrentGUI(selected);
+				} catch (RenderException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 		}
 		if(id.equals(GUIManager.SEND_HEIGHTMAP_BUTTON_ID)) {
 			guiManager.sendHeightMap();

@@ -16,6 +16,7 @@ import javax.swing.SwingConstants;
 
 import GUI.listeners.PerlinWindowActionListener;
 import heightMap.PerlinHeightMapGenerator;
+import heightMap.render.RenderException;
 import heightMap.transformations.MysticalEffect;
 import heightMap.transformations.Transformation;
 import heightMap.transformations.Translation;
@@ -77,7 +78,7 @@ public class PerlinGUI implements GUI {
 	}
 
 	@Override
-	public JPanel getJPanel() {		
+	public JPanel getJPanel() throws RenderException {		
 		
 		containerPanel = new JPanel();
         containerPanel.setLayout(new BorderLayout());
@@ -208,7 +209,7 @@ public class PerlinGUI implements GUI {
 	}
 
 	@Override
-	public BufferedImage getBufferedImage() {
+	public BufferedImage getBufferedImage() throws RenderException {
 		return perlinHeightMapGenerator.getCachedHeightMapImage();
 	}
 
@@ -220,7 +221,12 @@ public class PerlinGUI implements GUI {
 	@Override
 	public void update() {
 
-		imageIcon.setImage(perlinHeightMapGenerator.getCachedHeightMapImage());
+		try {
+			imageIcon.setImage(perlinHeightMapGenerator.getCachedHeightMapImage());
+		} catch (RenderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
         seedTextField.setText(perlinHeightMapGenerator.getSeed()+"");
     	sizeTextField.setText(perlinHeightMapGenerator.getMapSize()+"");

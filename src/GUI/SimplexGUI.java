@@ -1,6 +1,7 @@
 package GUI;
 
 import heightMap.SimplexHeightMapGenerator;
+import heightMap.render.RenderException;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -62,7 +63,7 @@ public class SimplexGUI implements GUI {
 	}
 
 	@Override
-	public JPanel getJPanel() {		
+	public JPanel getJPanel() throws RenderException {		
 		
 		containerPanel = new JPanel();
         containerPanel.setLayout(new BorderLayout());
@@ -170,7 +171,7 @@ public class SimplexGUI implements GUI {
 	}
 
 	@Override
-	public BufferedImage getBufferedImage() {
+	public BufferedImage getBufferedImage() throws RenderException {
 		return simplexHeightMapGenerator.getCachedHeightMapImage();
 	}
 
@@ -180,9 +181,14 @@ public class SimplexGUI implements GUI {
 	}
 
 	@Override
-	public void update() {
+	public void update()  {
 		
-		imageIcon.setImage(simplexHeightMapGenerator.getCachedHeightMapImage());
+		try {
+			imageIcon.setImage(simplexHeightMapGenerator.getCachedHeightMapImage());
+		} catch (RenderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
         largestFeatureTextField.setText(simplexHeightMapGenerator.getLargestFeature()+"");
         persistanceTextField.setText(simplexHeightMapGenerator.getPersistance()+"");

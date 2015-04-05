@@ -1,6 +1,7 @@
 package GUI;
 
 import heightMap.AbstractHeightMapGenerator;
+import heightMap.render.RenderException;
 
 import java.awt.image.BufferedImage;
 
@@ -13,9 +14,9 @@ import javax.swing.JPanel;
 */
 
 public interface GUI {	
-	public JPanel getJPanel();
-	public void update();
+	public JPanel getJPanel() throws RenderException;
+	public void update() throws RenderException;
 	public AbstractHeightMapGenerator getHeightMapGenerator();
-	public BufferedImage getBufferedImage();
+	public BufferedImage getBufferedImage() throws RenderException;
 	public String toString();
 }

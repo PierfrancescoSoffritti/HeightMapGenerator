@@ -1,4 +1,8 @@
 package heightMap;
+import heightMap.render.GradientManager;
+import heightMap.render.RenderException;
+
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 /**
@@ -21,10 +25,12 @@ public abstract class AbstractHeightMapGenerator {
 	protected float perturbDistance;
 	protected int erodeIterations;
 	protected float erodeSmoothness;
-	
-	protected boolean useGrayScale;
-	
+		
 	protected float minHeight, maxHeight;
+	private GradientManager defaultGradientManager;
+	
+	private boolean useGrayScale;
+	private boolean useHSBScale;
 	
 	protected AbstractHeightMapGenerator(int mapSize, int seed) {
 		this.mapSize = mapSize;
@@ -39,18 +45,19 @@ public abstract class AbstractHeightMapGenerator {
 		isValid = false;
 		
 		useGrayScale = true;
+		useHSBScale=false;
 	}
 	
 	public abstract HeightMap generateHeightMap();	
 	public abstract HeightMap generateRandomHeightMap();	
 	public abstract HeightMap generateSampleHeightMap();
 	
-	public BufferedImage generateHeightMapAndBufferedImage() {
+	public BufferedImage generateHeightMapAndBufferedImage() throws RenderException {
 		generateHeightMap();
 		return generateBufferedImage();
 	}
 	
-	public BufferedImage generateBufferedImage() {
+	public BufferedImage generateBufferedImage(GradientManager gradientManager) throws RenderException {
 		
 		// TODO handle exceptions 
 			
@@ -63,7 +70,7 @@ public abstract class AbstractHeightMapGenerator {
 		
 		for(int i=0; i<cachedHeightMap.getSize(); i++) {
 			for(int j=0; j<cachedHeightMap.getSize(); j++) {
-				cachedHeightMapImage.setRGB(i, j, getColor(cachedHeightMap.getHeights()[i][j]));
+				cachedHeightMapImage.setRGB(i, j, getColor(cachedHeightMap.getHeights()[i][j], gradientManager));
 			}
 		}
 		
@@ -72,7 +79,84 @@ public abstract class AbstractHeightMapGenerator {
 		return cachedHeightMapImage;
 	}
 	
-	protected abstract int getColor(float f);
+	public BufferedImage generateBufferedImage() throws RenderException {
+		if(this.defaultGradientManager == null || this.defaultGradientManager.isEmpty())
+			throw new RenderException("DefaultGradientManager is null or empty");
+			
+		return generateBufferedImage(this.defaultGradientManager);
+	}
+	
+	protected int getColor(float f, GradientManager gradientManager) throws RenderException {
+		
+		// i'm adding an offset of |min|. My values will go from 0 to max+|min|
+		// in this way i can easily  distribute them on the interval [0, 255]
+		// minHeight : x = maxHeight : 255
+		int value = (int) ( ((f+Math.abs(minHeight)) * 255)/(maxHeight+Math.abs(minHeight)) );
+		
+		
+		if(useHSBScale)
+			return getColorHSB(f);
+		else {
+			return gradientManager.renderPoint(value);	
+			
+			
+			//old
+//			if(value >= 0 && value <= 42) {
+//				r = 0; g = 0; b = (value*255)/42;
+//			}
+//			if(value >= 43 && value <= 85) {
+//				r = 0; g = (value*255)/85; b = 255;
+//			}
+//			if(value >= 86 && value <= 127) {
+//				r = 0; g = 255; b = 255-(value*255)/127;
+//			}
+//			if(value >= 128 && value <= 170) {
+//				r = (value*255)/170; g = 255; b = 0;
+//			}
+//			if(value >= 171 && value <= 245){
+//				r = 255; g = 255-(value*255)/245; b = 0;
+//			}
+//			if(value >= 246 && value <= 255){
+//				r = 255; g = 0; b = (value*255)/255;
+			// new
+//			if(value >= 0 && value <= 42) {
+//				r = 0; g = 0; b = offsetRGB(0, 42, 0, 255, value);
+//			}
+//			if(value >= 43 && value <= 85) {
+//				r = 0; g = offsetRGB(43, 85, 0, 255, value); b = 255;
+//			}
+//			if(value >= 86 && value <= 127) {
+//				r = 0; g = 255; b = 255-offsetRGB(86, 127, 0, 255, value);
+//			}
+//			if(value >= 128 && value <= 170) {
+//				r = offsetRGB(128, 170, 0, 255, value); g = 255; b = 0;
+//			}
+//			if(value >= 171 && value <= 245){
+//				r = 255; g = 255-offsetRGB(171, 245, 0, 255, value); b = 0;
+//			}
+//			if(value >= 246 && value <= 255){
+//				r = 255; g = 0; b = offsetRGB(246, 255, 0, 255, value);
+//			}
+		}
+	}
+	
+	/**
+	 *  use the HSB color model to obtain a smooth color transition
+	 *  @author Paolo Sarti
+	 */
+	private int getColorHSB(float f) {
+		float saturation=0.8f;
+		float brightness=0.6f;
+		//change the [-1,1] f to [0,1] hue
+		//I have to use a linear map hue=m*f+q
+		float minF=-1;
+		float maxF=1;
+		float m=1/(maxF-minF);
+		float q=-m*minF;
+		float hue=m*f+q;
+		
+		return Color.HSBtoRGB(hue, saturation, brightness);
+	}
 	
 	protected void setMapInfo(HeightMap heightMap) {
 		minHeight = 1000;
@@ -119,11 +203,19 @@ public abstract class AbstractHeightMapGenerator {
 		return res;
 	}
 	
+	public void setDefaultGradientManager(GradientManager gradientManager) {
+		this.defaultGradientManager = gradientManager;
+	}
+	
+	public GradientManager getGradientManager() {
+		return this.defaultGradientManager;
+	}
+	
 	public HeightMap getCachedHeightMap() {
 		return this.cachedHeightMap;
 	}
 	
-	public BufferedImage getCachedHeightMapImage() {
+	public BufferedImage getCachedHeightMapImage() throws RenderException {
 		if(isValid)
 			return this.cachedHeightMapImage;
 		else
@@ -134,7 +226,7 @@ public abstract class AbstractHeightMapGenerator {
 		isValid = false;
 	}
 	
-	public void validate() {
+	public void validate() throws RenderException {
 		this.generateBufferedImage();
 	}
 	
@@ -207,6 +299,14 @@ public abstract class AbstractHeightMapGenerator {
 
 	public void setErodeSmoothness(float erodeSmoothness) {
 		this.erodeSmoothness = erodeSmoothness;
+	}
+	
+	public boolean isUseHSBScale() {
+		return useHSBScale;
+	}
+
+	public void setUseHSBScale(boolean useHSBScale) {
+		this.useHSBScale = useHSBScale;
 	}
 
 }

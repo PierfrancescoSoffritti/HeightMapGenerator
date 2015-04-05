@@ -1,5 +1,6 @@
 package GUI.listeners;
 import heightMap.PerlinHeightMapGenerator;
+import heightMap.render.RenderException;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -36,7 +37,12 @@ public class PerlinWindowActionListener implements ActionListener {
 			else
 				perlinGUI.getHeightMapGenerator().setUseGrayScale(true);
 			
-			perlinGUI.getHeightMapGenerator().generateBufferedImage();
+			try {
+				perlinGUI.getHeightMapGenerator().generateBufferedImage();
+			} catch (RenderException e1) {
+				// TODO handle exception
+				e1.printStackTrace();
+			}
 			perlinGUI.update();
 		}
 		
@@ -48,7 +54,12 @@ public class PerlinWindowActionListener implements ActionListener {
 			else
 				perlinGen.setUseHSBScale(true);
 			
-			perlinGUI.getHeightMapGenerator().generateBufferedImage();
+			try {
+				perlinGUI.getHeightMapGenerator().generateBufferedImage();
+			} catch (RenderException e1) {
+				// TODO TODO handle exception
+				e1.printStackTrace();
+			}
 			perlinGUI.update();
 		}
 		

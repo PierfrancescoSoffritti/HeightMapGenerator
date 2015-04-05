@@ -1,5 +1,6 @@
 package GUI.listeners;
 import heightMap.SimplexHeightMapGenerator;
+import heightMap.render.RenderException;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -34,7 +35,12 @@ public class SimplexWindowActionListener implements ActionListener {
 			else
 				simplexGUI.getHeightMapGenerator().setUseGrayScale(true);
 			
-			simplexGUI.getHeightMapGenerator().generateBufferedImage();
+			try {
+				simplexGUI.getHeightMapGenerator().generateBufferedImage();
+			} catch (RenderException e1) {
+				// TODO TODO handle exception
+				e1.printStackTrace();
+			}
 			simplexGUI.update();
 		}
 		
@@ -46,7 +52,12 @@ public class SimplexWindowActionListener implements ActionListener {
 			else
 				simplexGen.setUseHSBScale(true);
 			
-			simplexGUI.getHeightMapGenerator().generateBufferedImage();
+			try {
+				simplexGUI.getHeightMapGenerator().generateBufferedImage();
+			} catch (RenderException e1) {
+				// TODO TODO handle exception
+				e1.printStackTrace();
+			}
 			simplexGUI.update();
 		}
 		

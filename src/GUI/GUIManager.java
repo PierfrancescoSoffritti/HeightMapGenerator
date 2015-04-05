@@ -1,6 +1,7 @@
 package GUI;
 
 import heightMap.AbstractHeightMapGenerator;
+import heightMap.render.RenderException;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -38,7 +39,7 @@ public class GUIManager {
 	private MainWindowActionListener mainWindowActionListener;
 	private HeightMapWebSocketServer ws;
 	
-	public GUIManager(ArrayList<AbstractHeightMapGenerator> heightMapGenerators, HeightMapWebSocketServer ws) {
+	public GUIManager(ArrayList<AbstractHeightMapGenerator> heightMapGenerators, HeightMapWebSocketServer ws) throws RenderException {
 		
 		GUIList = new ArrayList<GUI>();
 		
@@ -53,7 +54,7 @@ public class GUIManager {
 		initMainWindow();
 	}
 	
-	private void initMainWindow() {
+	private void initMainWindow() throws RenderException {
 		
         frame = new JFrame("Heightmap generator - Pierfrancesco Soffritti");
         frame.setLayout(new BorderLayout());
@@ -120,7 +121,7 @@ public class GUIManager {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
-	public void updateAll() {
+	public void updateAll() throws RenderException {
 		GUIList.get(currentGUI).update();
 		update();
 	}
@@ -140,11 +141,11 @@ public class GUIManager {
 		return GUIList.get(currentGUI);
 	}
 
-	public void showTopography(int threshold) {
+	public void showTopography(int threshold) throws RenderException {
 		new TopographyGUI(threshold, getCurrentGUI().getBufferedImage()).show();		
 	}
 
-	public void setCurrentGUI(int selected) {
+	public void setCurrentGUI(int selected) throws RenderException {
 		this.currentGUI = selected;
 		
 		currentGUIPanel.removeAll();
