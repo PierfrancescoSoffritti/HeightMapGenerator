@@ -54,8 +54,8 @@ public class SimplexHeightMapGenerator extends AbstractHeightMapGenerator {
 		// ---- 
 		
 		
-		normalize();
-		setMapInfo(cachedHeightMap);		
+//		normalize();
+//		setMapInfo(cachedHeightMap);		
 		return cachedHeightMap;
 	}
 	

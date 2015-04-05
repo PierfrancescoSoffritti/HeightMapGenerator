@@ -2,14 +2,19 @@ package GUI;
 
 import heightMap.SimplexHeightMapGenerator;
 import heightMap.render.RenderException;
+import heightMap.transformations.MysticalEffect;
+import heightMap.transformations.Transformation;
+import heightMap.transformations.Translation;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -34,7 +39,10 @@ public class SimplexGUI implements GUI {
 	public static final String ERODE_ITER_TEXT_FIELD_ID = "ERODE_ITER_TEXT_FIELD_ID";
 	public static final String ERODE_SMOOTH_TEXT_FIELD_ID = "ERODE_SMOOTH_TEXT_FIELD_ID";
 	public static final String USE_GRAY_SCALE_CB_ID = "USE_GRAY_SCALE_CB_ID";
+	public final static String START_ANIMATION_BUTTON_ID = "START_ANIMATION_BUTTON_ID";
+	public final static String STOP_ANIMATION_BUTTON_ID = "STOP_ANIMATION_BUTTON_ID";
 	public static final String USE_HSB_COLOR_SCALE = "USE_HSB_COLOR_SCALE";
+	public final static String TRANSFORMATIONS_NAMES_LIST_ID = "TRANSFORMATIONS_NAMES_LIST_ID";
 	
 	public final static String RANDOM_GENERATION_BUTTON_ID = "RANDOM_GENERATION_BUTTON_ID";
 
@@ -54,13 +62,22 @@ public class SimplexGUI implements GUI {
 	private JTextField erodeSmoothnessTextField;
 	private JLabel minMaxValueLabel;
 	private ImageIcon imageIcon;
+	private JComboBox<String> transformationList;
 	private JCheckBox useHSBScaleCheckBox;
+	
+	private boolean isRunning;	
+	
+	private ArrayList<Transformation> transformations;
+	private int currentTransformation;
 	
 	public SimplexGUI(GUIManager guiManager, SimplexHeightMapGenerator simplexHeightMapGenerator) {
 		
 		this.simplexHeightMapGenerator = simplexHeightMapGenerator;		
 		this.simplexWindowActionListener = new SimplexWindowActionListener(this);
 		this.guiManager = guiManager;
+		
+		this.transformations = new ArrayList<Transformation>();
+		this.currentTransformation = 0;
 	}
 
 	@Override
@@ -159,6 +176,25 @@ public class SimplexGUI implements GUI {
         useHSBScaleCheckBox.addActionListener(simplexWindowActionListener);
         useHSBScaleCheckBox.setEnabled(false);
         
+        JLabel transformationLabel = new JLabel("Transformation:", SwingConstants.CENTER);
+        controlsPanel.add(transformationLabel);
+        String[] transformationNames = initTransformations();
+        transformationList = new JComboBox<String>(transformationNames);
+        transformationList.setSelectedIndex(currentTransformation);
+        controlsPanel.add(transformationList);
+        transformationList.setName(TRANSFORMATIONS_NAMES_LIST_ID);
+        transformationList.addActionListener(simplexWindowActionListener);        
+        
+        JButton startAnimation = new JButton("Start real-time rendering");
+        controlsPanel.add(startAnimation);
+        startAnimation.setName(START_ANIMATION_BUTTON_ID);
+        startAnimation.addActionListener(simplexWindowActionListener);
+        
+        JButton stopAnimation = new JButton("Stop real-time rendering");
+        controlsPanel.add(stopAnimation);
+        stopAnimation.setName(STOP_ANIMATION_BUTTON_ID);
+        stopAnimation.addActionListener(simplexWindowActionListener);
+        
         JButton randomGenerationButton = new JButton("Random Generation");
         controlsPanel.add(randomGenerationButton);
         randomGenerationButton.setName(RANDOM_GENERATION_BUTTON_ID);
@@ -170,6 +206,17 @@ public class SimplexGUI implements GUI {
         containerPanel.add(controlsPanel, BorderLayout.PAGE_END);
         
         return containerPanel;
+	}
+	
+	private String[] initTransformations() {
+		transformations.add(new Translation(simplexHeightMapGenerator));
+		transformations.add(new MysticalEffect(simplexHeightMapGenerator));
+		
+		String[] trasformationNames = new String[transformations.size()];
+        for(int i=0; i<transformations.size(); i++)
+        	trasformationNames[i] = transformations.get(i).toString();
+        
+        return trasformationNames;
 	}
 
 	@Override
@@ -216,5 +263,74 @@ public class SimplexGUI implements GUI {
 	@Override
 	public String toString() {
 		return "Simplex Noise";
+	}
+	
+	public void startAnimation() {
+		isRunning = true;
+
+		Thread animationThread = new Thread() {
+			@Override
+			public void run() {
+				
+				Transformation transformation = transformations.get(currentTransformation);
+				int x = 0;
+				int translateX = 1;
+				int translateY = 0;	
+				//60 fps
+				long fps=60;
+				long timeToSleep=1000/fps; //millis
+				long startTime=0;
+				long endTime=0;
+				long diffTime=0;
+				while(isRunning) {
+					
+					//count the milliseconds of the operation
+					startTime = System.currentTimeMillis();
+					
+					// TODO at the moment i'm to lazy to do it better
+					if(transformation instanceof MysticalEffect) {
+						((MysticalEffect)transformation).applyMysticalEffect();
+					}
+					if(transformation instanceof Translation && !(transformation instanceof MysticalEffect)) {
+						x++;
+						((Translation)transformation).translate(translateX, translateY, x*translateX, x*translateY);
+					}
+					
+					update();
+					
+					//count the milliseconds of the operation
+					endTime = System.currentTimeMillis();
+					diffTime = (endTime-startTime);
+					
+					try {
+						//sleeps the number of milliseconds that remain to have a smooth, locked 60 fps animation
+						if(diffTime<timeToSleep)
+							sleep(timeToSleep-diffTime);
+						//if the time needed is more, then no sleep is slept
+						
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+		
+		animationThread.start();
+	}
+
+	public void stopAnimation() {
+		isRunning = false;
+	}
+	
+	public boolean isRunning() {
+		return isRunning;
+	}
+	
+	public int getCurrentTransformation () {
+		return currentTransformation;
+	}
+
+	public void setCurrentTransformation(int selected) {
+		this.currentTransformation = selected;
 	}
 }

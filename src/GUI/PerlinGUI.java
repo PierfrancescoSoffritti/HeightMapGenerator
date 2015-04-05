@@ -58,8 +58,7 @@ public class PerlinGUI implements GUI {
 	private JTextField erodeSmoothnessTextField;
 	private JLabel minMaxValueLabel;
 	private ImageIcon imageIcon;
-	private JComboBox<String> transformationList;
-	
+	private JComboBox<String> transformationList;	
 	private JCheckBox useHSBScaleCheckBox;
 	
 	private boolean isRunning;	
@@ -280,7 +279,7 @@ public class PerlinGUI implements GUI {
 					if(transformation instanceof MysticalEffect) {
 						((MysticalEffect)transformation).applyMysticalEffect();
 					}
-					if(!(transformation instanceof MysticalEffect)) {
+					if(transformation instanceof Translation && !(transformation instanceof MysticalEffect)) {
 						x++;
 						((Translation)transformation).translate(translateX, translateY, x*translateX, x*translateY);
 					}

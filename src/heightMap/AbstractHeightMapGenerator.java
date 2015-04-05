@@ -228,6 +228,9 @@ public abstract class AbstractHeightMapGenerator {
 	}
 	
 	public void setUseGrayScale(boolean useGrayScale) {
+		if(this.useGrayScale != useGrayScale)
+			isValid = false;
+		
 		this.useGrayScale = useGrayScale;
 		
 		if(useGrayScale)
@@ -300,6 +303,9 @@ public abstract class AbstractHeightMapGenerator {
 	}
 
 	public void setUseHSBScale(boolean useHSBScale) {
+		if(this.useHSBScale != useHSBScale)
+				isValid = false;
+		
 		this.useHSBScale = useHSBScale;
 	}
 

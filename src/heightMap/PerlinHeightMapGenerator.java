@@ -49,8 +49,8 @@ public class PerlinHeightMapGenerator extends AbstractHeightMapGenerator {
 		isValid = false;
 		// ----
 		
-		normalize();
-		setMapInfo(cachedHeightMap);
+//		normalize();
+//		setMapInfo(cachedHeightMap);
 		
 		return cachedHeightMap;
 	}

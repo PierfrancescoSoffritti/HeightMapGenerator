@@ -6,8 +6,10 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
+import GUI.PerlinGUI;
 import GUI.SimplexGUI;
 
 /**
@@ -24,6 +26,7 @@ public class SimplexWindowActionListener implements ActionListener {
 		this.simplexGUI = simplexGUI;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Component c = (Component) e.getSource();
@@ -172,6 +175,21 @@ public class SimplexWindowActionListener implements ActionListener {
 		if(id.equals(SimplexGUI.RANDOM_GENERATION_BUTTON_ID)) {
 			simplexGUI.getHeightMapGenerator().generateRandomHeightMap();
 			simplexGUI.update();
+		}
+		if(id.equals(PerlinGUI.START_ANIMATION_BUTTON_ID)) {
+			if(!simplexGUI.isRunning())
+				simplexGUI.startAnimation();
+		}
+		if(id.equals(PerlinGUI.STOP_ANIMATION_BUTTON_ID)) {
+			simplexGUI.stopAnimation();
+			simplexGUI.getHeightMapGenerator().generateHeightMap();
+			simplexGUI.update();
+		}
+		if(id.equals(PerlinGUI.TRANSFORMATIONS_NAMES_LIST_ID)) {
+			int selected = ((JComboBox)c).getSelectedIndex();
+			
+			if(selected != simplexGUI.getCurrentTransformation())
+				simplexGUI.setCurrentTransformation(selected);
 		}
 	}
 }

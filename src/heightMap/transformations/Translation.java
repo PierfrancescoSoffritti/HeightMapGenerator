@@ -2,6 +2,7 @@ package heightMap.transformations;
 
 import heightMap.AbstractHeightMapGenerator;
 import heightMap.PerlinHeightMapGenerator;
+import heightMap.SimplexHeightMapGenerator;
 
 /**
 * Translation.java
@@ -41,8 +42,7 @@ public class Translation extends Transformation {
 		else if(x>=0 && y<=0)
 			translateRightLeftBottomTop(x, y);
 		
-		if(heightMapGenerator instanceof PerlinHeightMapGenerator) {
-			
+		if(heightMapGenerator instanceof PerlinHeightMapGenerator) {			
 			// generates noise on empty coloumns
 			heightMapGenerator.getCachedHeightMap()
 			.setPerlinNoise(
@@ -53,6 +53,21 @@ public class Translation extends Transformation {
 			heightMapGenerator.getCachedHeightMap()
 			.setPerlinNoise(
 					((PerlinHeightMapGenerator)heightMapGenerator).getPerlinNoiseFrequency(),
+					0, size, size-y-1, size, xNoiseOffset, yNoiseOffset);
+		}
+		if(heightMapGenerator instanceof SimplexHeightMapGenerator) {			
+			// generates noise on empty coloumns
+			heightMapGenerator.getCachedHeightMap()
+			.setSimplexNoise(
+					((SimplexHeightMapGenerator)heightMapGenerator).getLargestFeature(),
+					((SimplexHeightMapGenerator)heightMapGenerator).getPersistance(),
+					size-x-1, size, 0, size, xNoiseOffset, yNoiseOffset);
+
+			// generates noise on empty rows
+			heightMapGenerator.getCachedHeightMap()
+			.setSimplexNoise(
+					((SimplexHeightMapGenerator)heightMapGenerator).getLargestFeature(),
+					((SimplexHeightMapGenerator)heightMapGenerator).getPersistance(),
 					0, size, size-y-1, size, xNoiseOffset, yNoiseOffset);
 		}
 		

@@ -95,6 +95,32 @@ public class HeightMap {
 		}
 	}
 	
+	public void setSimplexNoise(int largestFeature, double persistence, int xFrom, int xTo, int yFrom, int yTo,
+			int xNoiseOffset, int yNoiseOffset) {
+		
+		SimplexNoise simplexNoise = new SimplexNoise(largestFeature, persistence, seed);
+		double xStart=0;
+		double XEnd=500;
+		double yStart=0;
+		double yEnd=500;
+		
+		//int xResolution=200;
+		//int yResolution=200;
+		
+		//double[][] result=new double[xResolution][yResolution];
+		
+		for (int i = xFrom; i < xTo; i++) {
+			for (int j = yFrom; j < yTo; j++) {
+				int x = (int)(xStart+i+xNoiseOffset*((XEnd-xStart)/size));
+				int y = (int)(yStart+j+yNoiseOffset*((yEnd-yStart)/size));
+				heights[i][j] = (float) ( (simplexNoise.getNoise2D(x,y)) );
+				
+				if(heights[i][j] > 1 || heights[i][j] < -1)
+					System.out.println(heights[i][j]);
+			}
+		}
+	}
+	
 	/*
 	* this step displaces the height elements according to another Perlin noise map
 	* with a much higher frequency. It is very similar to creating an ocean wave effect.
