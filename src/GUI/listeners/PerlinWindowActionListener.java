@@ -46,13 +46,11 @@ public class PerlinWindowActionListener implements ActionListener {
 			perlinGUI.update();
 		}
 		
-		if(id.equals(PerlinGUI.USE_HSB_COLOR_SCALE))
-		{
-			PerlinHeightMapGenerator perlinGen=perlinGUI.getHeightMapGenerator();
-			if(perlinGen.isUseHSBScale() == true)
-				perlinGen.setUseHSBScale(false);
+		if(id.equals(PerlinGUI.USE_HSB_COLOR_SCALE)) {
+			if(perlinGUI.getHeightMapGenerator().isUseHSBScale() == true)
+				perlinGUI.getHeightMapGenerator().setUseHSBScale(false);
 			else
-				perlinGen.setUseHSBScale(true);
+				perlinGUI.getHeightMapGenerator().setUseHSBScale(true);
 			
 			try {
 				perlinGUI.getHeightMapGenerator().generateBufferedImage();

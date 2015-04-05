@@ -1,6 +1,8 @@
 package heightMap;
 import heightMap.render.GradientManager;
+import heightMap.render.GrayScaleGradientManager;
 import heightMap.render.RenderException;
+import heightMap.render.TerrainGradientManager;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -28,6 +30,8 @@ public abstract class AbstractHeightMapGenerator {
 		
 	protected float minHeight, maxHeight;
 	private GradientManager defaultGradientManager;
+	private GradientManager grayScaleGradientManager;
+	private GradientManager terrainGradientManager;
 	
 	private boolean useGrayScale;
 	private boolean useHSBScale;
@@ -46,6 +50,10 @@ public abstract class AbstractHeightMapGenerator {
 		
 		useGrayScale = true;
 		useHSBScale=false;
+		
+		grayScaleGradientManager = new GrayScaleGradientManager();
+		defaultGradientManager = grayScaleGradientManager;
+		terrainGradientManager = new TerrainGradientManager();
 	}
 	
 	public abstract HeightMap generateHeightMap();	
@@ -88,36 +96,17 @@ public abstract class AbstractHeightMapGenerator {
 	
 	protected int getColor(float f, GradientManager gradientManager) throws RenderException {
 		
-		// i'm adding an offset of |min|. My values will go from 0 to max+|min|
-		// in this way i can easily  distribute them on the interval [0, 255]
-		// minHeight : x = maxHeight : 255
-		int value = (int) ( ((f+Math.abs(minHeight)) * 255)/(maxHeight+Math.abs(minHeight)) );
-		
-		
-		if(useHSBScale)
+		if(useHSBScale && !useGrayScale)
 			return getColorHSB(f);
 		else {
-			return gradientManager.renderPoint(value);	
 			
+			// i'm adding an offset of |min|. My values will go from 0 to max+|min|
+			// in this way i can easily  distribute them on the interval [0, 255]
+			// minHeight : x = maxHeight : 255
+			int value = (int) ( ((f+Math.abs(minHeight)) * 255)/(maxHeight+Math.abs(minHeight)) );
 			
-			//old
-//			if(value >= 0 && value <= 42) {
-//				r = 0; g = 0; b = (value*255)/42;
-//			}
-//			if(value >= 43 && value <= 85) {
-//				r = 0; g = (value*255)/85; b = 255;
-//			}
-//			if(value >= 86 && value <= 127) {
-//				r = 0; g = 255; b = 255-(value*255)/127;
-//			}
-//			if(value >= 128 && value <= 170) {
-//				r = (value*255)/170; g = 255; b = 0;
-//			}
-//			if(value >= 171 && value <= 245){
-//				r = 255; g = 255-(value*255)/245; b = 0;
-//			}
-//			if(value >= 246 && value <= 255){
-//				r = 255; g = 0; b = (value*255)/255;
+			return gradientManager.renderPoint(value);
+			
 			// new
 //			if(value >= 0 && value <= 42) {
 //				r = 0; g = 0; b = offsetRGB(0, 42, 0, 255, value);
@@ -240,6 +229,11 @@ public abstract class AbstractHeightMapGenerator {
 	
 	public void setUseGrayScale(boolean useGrayScale) {
 		this.useGrayScale = useGrayScale;
+		
+		if(useGrayScale)
+			defaultGradientManager = grayScaleGradientManager;
+		else
+			defaultGradientManager = terrainGradientManager;
 	}
 
 

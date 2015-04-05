@@ -24,15 +24,7 @@ public class Main {
 	private static final int port = 8888;
 
 	public static void main(String[] args) throws RenderException {
-		
-		GradientManager grayScaleGradientManager = new GradientManager();
-		try {
-			grayScaleGradientManager.addGradientPoint(-1, new Color(255,255,255));
-		} catch (RenderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-		
+				
 		GradientManager RGBGradientManager = new GradientManager();
 		try {
 			RGBGradientManager.addGradientPoint (-1.0000f, new Color (  0,   0, 128)); // deeps
@@ -59,10 +51,8 @@ public class Main {
 		
 		PerlinHeightMapGenerator perlinHeightMapGenerator = new PerlinHeightMapGenerator(mapSize, seed, 6.0f, 320.0f,
 				32.0f, 20, 160.0f);
-		perlinHeightMapGenerator.setDefaultGradientManager(grayScaleGradientManager);
 		
 		SimplexHeightMapGenerator simplexHeightMapGenerator = new SimplexHeightMapGenerator(mapSize, seed, 832910, 0.577922, 0f, 0f, 0, 0f);
-		simplexHeightMapGenerator.setDefaultGradientManager(grayScaleGradientManager);
 		
 		ArrayList<AbstractHeightMapGenerator> heightMapGenerators = new ArrayList<AbstractHeightMapGenerator>();
 		heightMapGenerators.add(perlinHeightMapGenerator);

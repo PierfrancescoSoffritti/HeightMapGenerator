@@ -54,6 +54,7 @@ public class SimplexGUI implements GUI {
 	private JTextField erodeSmoothnessTextField;
 	private JLabel minMaxValueLabel;
 	private ImageIcon imageIcon;
+	private JCheckBox useHSBScaleCheckBox;
 	
 	public SimplexGUI(GUIManager guiManager, SimplexHeightMapGenerator simplexHeightMapGenerator) {
 		
@@ -150,12 +151,13 @@ public class SimplexGUI implements GUI {
         useGrayScaleCheckBox.setName(USE_GRAY_SCALE_CB_ID);
         useGrayScaleCheckBox.addActionListener(simplexWindowActionListener);
         
-        JCheckBox useHSBScaleCheckBox = new JCheckBox("Use HSB color scale");
+        useHSBScaleCheckBox = new JCheckBox("Use HSB color scale");
         useHSBScaleCheckBox.setSelected(false);
         useHSBScaleCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
         controlsPanel.add(useHSBScaleCheckBox);
         useHSBScaleCheckBox.setName(USE_HSB_COLOR_SCALE);
         useHSBScaleCheckBox.addActionListener(simplexWindowActionListener);
+        useHSBScaleCheckBox.setEnabled(false);
         
         JButton randomGenerationButton = new JButton("Random Generation");
         controlsPanel.add(randomGenerationButton);
@@ -199,6 +201,14 @@ public class SimplexGUI implements GUI {
     	erodeIterationTextField.setText(simplexHeightMapGenerator.getErodeIterations()+"");
     	erodeSmoothnessTextField.setText(simplexHeightMapGenerator.getErodeSmoothness()+"");
     	minMaxValueLabel.setText("Info:  " +simplexHeightMapGenerator.getMapInfo());
+    	
+    	if(simplexHeightMapGenerator.getUseGrayScale()) {
+    		useHSBScaleCheckBox.setEnabled(false);
+    		useHSBScaleCheckBox.setSelected(false);
+    		simplexHeightMapGenerator.setUseHSBScale(false);
+    	}
+    	else
+    		useHSBScaleCheckBox.setEnabled(true);
         
         guiManager.updateFromChild();
 	}
