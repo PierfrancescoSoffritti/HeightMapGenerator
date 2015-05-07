@@ -274,7 +274,7 @@ public class SimplexGUI implements GUI {
 				
 				Transformation transformation = transformations.get(currentTransformation);
 				int x = 0;
-				int translateX = 1;
+				int translateX = 2;
 				int translateY = 0;	
 				//60 fps
 				long fps=60;

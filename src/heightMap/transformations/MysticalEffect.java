@@ -2,6 +2,7 @@ package heightMap.transformations;
 
 import heightMap.AbstractHeightMapGenerator;
 import heightMap.PerlinHeightMapGenerator;
+import heightMap.SimplexHeightMapGenerator;
 
 /**
 * MysticalEffect.java
@@ -22,6 +23,12 @@ public class MysticalEffect extends Translation {
 			heightMapGenerator.getCachedHeightMap()
 			.addPerlinNoise(
 					((PerlinHeightMapGenerator)heightMapGenerator).getPerlinNoiseFrequency(),
+					1, size, 0, size, 0, 0);
+		if(heightMapGenerator instanceof SimplexHeightMapGenerator)
+			heightMapGenerator.getCachedHeightMap()
+			.setSimplexNoise(
+					((SimplexHeightMapGenerator)heightMapGenerator).getLargestFeature(),
+					((SimplexHeightMapGenerator)heightMapGenerator).getPersistance(),
 					1, size, 0, size, 0, 0);
 		
 		heightMapGenerator.invalidate();
