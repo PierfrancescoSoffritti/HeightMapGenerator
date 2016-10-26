@@ -1,6 +1,9 @@
 # HeightMapGenerator
 A pretty extensible java height map generator based on Perlin Noise and Simplex Noise.
-It can send data through web socket to a javascript application in order to generate the 3D model of the visible height map.
+It can send data through web socket to a javascript application in order to create a 3D model of the generated height map.
+
+[Simplex Noise video](https://www.youtube.com/watch?v=CLzB6qL86qQ)<br/>
+[Psyco Perlin Noise video :)](https://www.youtube.com/watch?v=IBLfilm35xU)
 
 # WebSocket Usage
 #### on Windows:
